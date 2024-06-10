@@ -3412,7 +3412,7 @@ GameObject:
   - component: {fileID: 2536769148038091450}
   - component: {fileID: 3337088222361414835}
   m_Layer: 0
-  m_Name: Green
+  m_Name: Wind Monster
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
