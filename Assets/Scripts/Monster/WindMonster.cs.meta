@@ -1,0 +1,13 @@
+fileFormatVersion: 2
+guid: 54eaf7bcd50f12442ba5b975fdea5970
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - runeDB: {fileID: 11400000, guid: ef85cd183c1fa0847aa7ced09c328f2e, type: 2}
+  - monsterDB: {fileID: 11400000, guid: 75addf0a7a70391438098e3bbb230ba9, type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
