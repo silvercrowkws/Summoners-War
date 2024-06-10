@@ -32,6 +32,16 @@ public class MonsterBase : MonoBehaviour
     /// </summary>
     GameManager gameManager;
 
+    /// <summary>
+    /// 애니메이터
+    /// </summary>
+    Animator animator;
+
+    protected virtual void Awake()
+    {
+        animator = GetComponent<Animator>();
+    }
+
     private void Start()
     {
         GameManager gameManager = GameManager.Instance;

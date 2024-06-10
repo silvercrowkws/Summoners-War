@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e9b5a314af63c244f9eea4a584046d95, type: 3}
-  m_Name: Rune5
+  m_Name: 01_Rune_Water
   m_EditorClassIdentifier: 
-  RuneText: "\uBC29\uC5B4\uB8EC"
-  runeNumber: 5
-  upAttack: 2
-  upDefense: 5
+  RuneText: "\uACF5\uACA9\uB8EC"
+  runeNumber: 1
+  upAttack: 5
+  upDefense: 2
   upHP: 2
-  upAttackSpeed: 5
+  upAttackSpeed: 1

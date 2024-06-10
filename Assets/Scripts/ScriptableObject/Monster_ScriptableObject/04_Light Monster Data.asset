@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b6f1e30767b67bb4c8990c5a2012a253, type: 3}
-  m_Name: Fire Monster Data
+  m_Name: 04_Light Monster Data
   m_EditorClassIdentifier: 
-  MonsterName: Fire
-  MonsterText: "\uBD88\uC18D\uC131 \uBAAC\uC2A4\uD130\uC774\uB2E4"
-  element: 2
-  monsterType: 1
-  baseAttackPower: 10
-  baseDefense: 20
+  MonsterName: Light
+  MonsterText: "\uBE5B\uC18D\uC131 \uBAAC\uC2A4\uD130\uC774\uB2E4"
+  element: 4
+  monsterType: 0
+  baseAttackPower: 20
+  baseDefense: 15
   baseHP: 10
   baseAttackSpeed: 10
