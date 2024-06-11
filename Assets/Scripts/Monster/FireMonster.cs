@@ -26,8 +26,9 @@ public class FireMonster : MonsterBase
     IEnumerator AttackCoroutine()
     {
         animator.SetTrigger("Attack");
-        yield return new WaitForSeconds(0.5f);
-        particle.Play();        // 파티클은 코루틴 만들어서 실행해야 함
+        yield return new WaitForSeconds(0.5f);      // 0.5초 기다리는게 아니라 애니매이션에 클립 넣어서 그 부분에 파티클 실행되게 해야함
+                                                    // AttackStart, AttackEnd 넣어서 2개 넣어서
+        particle.Play();
     }
 
 #if UNITY_EDITOR
