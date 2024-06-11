@@ -19,10 +19,10 @@ public class FireMonster : MonsterBase
         
     }
 
-    /// <summary>
+    /*/// <summary>
     /// 애니메이션 이벤트로 파티클 시작
     /// </summary>
-    void OnParticleStart()
+    protected void OnParticleStart()
     {
         particle.Play();
     }
@@ -30,15 +30,15 @@ public class FireMonster : MonsterBase
     /// <summary>
     /// 애니메이션 이벤트로 파티클 종료
     /// </summary>
-    void OnParticleStop()
+    protected void OnParticleStop()
     {
         particle.Stop();
         StartCoroutine(IdleCoroutine());
-    }
+    }*/
 
 #if UNITY_EDITOR
 
-    public void Test_Attack()
+    public void Test_FireMonster_Attack()
     {
         Debug.Log($"FireMonster가 Attack 상태로 전환");
         State = MonsterState.Attack;

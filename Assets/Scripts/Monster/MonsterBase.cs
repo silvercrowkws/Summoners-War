@@ -149,12 +149,29 @@ public class MonsterBase : MonoBehaviour
     }
 
     /// <summary>
+    /// 애니메이션 이벤트로 파티클 시작
+    /// </summary>
+    protected virtual void OnParticleStart()
+    {
+        particle.Play();
+    }
+
+    /// <summary>
+    /// 애니메이션 이벤트로 파티클 종료
+    /// </summary>
+    protected virtual void OnParticleStop()
+    {
+        particle.Stop();
+        StartCoroutine(IdleCoroutine());
+    }
+
+    /// <summary>
     /// Idle 상태로 돌아가기 위한 코루틴
     /// </summary>
     /// <returns></returns>
     protected IEnumerator IdleCoroutine()
     {
-        State = MonsterState.Idle;
         yield return null;
+        State = MonsterState.Idle;
     }
 }
