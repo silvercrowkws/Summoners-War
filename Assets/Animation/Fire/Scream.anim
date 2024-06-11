@@ -75990,14 +75990,14 @@ AnimationClip:
   - time: 0.23333333
     functionName: AttackStart
     data: 
-    objectReferenceParameter: {fileID: 0}
+    objectReferenceParameter: {fileID: 11500000, guid: 182c5957a3e85034b8a95fd372a36961, type: 3}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
   - time: 1.8333334
     functionName: AttackEnd
     data: 
-    objectReferenceParameter: {fileID: 0}
+    objectReferenceParameter: {fileID: 11500000, guid: 182c5957a3e85034b8a95fd372a36961, type: 3}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
