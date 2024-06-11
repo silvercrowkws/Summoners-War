@@ -1,21 +1,67 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public enum MonsterState
 {
-    Idle = 0,
-    Attack,
-    GetHit,
-    Die
+    Idle = 0,       // 대기 상태
+    Attack,         // 공격 상태
+    GetHit,         // 피격 상태
+    Die             // 사망 상태
 }
 
 public class MonsterBase : MonoBehaviour
 {
     /// <summary>
-    /// 몬스터의 기본 상태는 Idle
+    /// 몬스터의 상태(기본은 Idle)
     /// </summary>
-    MonsterState monsterState = MonsterState.Idle;
+    MonsterState state = MonsterState.Idle;
+
+    public MonsterState State
+    {
+        get => state;
+        set
+        {
+            if(state != value)
+            {
+                state = value;
+                switch (state)
+                {
+                    case MonsterState.Idle:
+                        Debug.Log("대기 상태");
+                        onMonsterStateChange?.Invoke(state);
+                        onMonsterStateUpdate = Update_Idle;
+                        break;
+                    case MonsterState.Attack:
+                        Debug.Log("공격 상태");
+                        onMonsterStateChange?.Invoke(state);
+                        onMonsterStateUpdate = Update_Attack;
+                        break;
+                    case MonsterState.GetHit:
+                        Debug.Log("피격 상태");
+                        onMonsterStateChange?.Invoke(state);
+                        onMonsterStateUpdate = Update_GetHit;
+                        break;
+                    case MonsterState.Die:
+                        Debug.Log("사망 상태");
+                        onMonsterStateChange?.Invoke(state);
+                        onMonsterStateUpdate = Update_Die;
+                        break;
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// 몬스터의 상태가 변경되었음을 알리는 델리게이트
+    /// </summary>
+    public Action<MonsterState> onMonsterStateChange;
+
+    /// <summary>
+    /// 몬스터의 상태별로 행동으로 전환하는 델리게이트
+    /// </summary>
+    public Action onMonsterStateUpdate;
 
     /// <summary>
     /// 룬 정보(인스펙터에서 할당)
@@ -35,22 +81,58 @@ public class MonsterBase : MonoBehaviour
     /// <summary>
     /// 애니메이터
     /// </summary>
-    Animator animator;
+    protected Animator animator;
 
     protected virtual void Awake()
     {
         animator = GetComponent<Animator>();
+
+        onMonsterStateUpdate = Update_Idle;
     }
 
     private void Start()
     {
-        GameManager gameManager = GameManager.Instance;
+        gameManager = GameManager.Instance;
 
         //Debug.Log($"룬 체력 : {runeDB.upHP}");
         //Debug.Log($"기본 체력 : {monsterDB.baseHP}");
         //Debug.Log($"합산 체력 : {monsterDB.baseHP * runeDB.upHP}");
     }
 
+    protected virtual void Update()
+    {
+        onMonsterStateUpdate();
+    }
 
+    /// <summary>
+    /// Idle 상태
+    /// </summary>
+    protected virtual void Update_Idle()
+    {
+        
+    }
 
+    /// <summary>
+    /// Attack 상태
+    /// </summary>
+    protected virtual void Update_Attack()
+    {
+        Debug.Log("MonsterBase의 Update_Attack 실행");
+    }
+
+    /// <summary>
+    /// GetHit 상태
+    /// </summary>
+    protected virtual void Update_GetHit()
+    {
+        
+    }
+
+    /// <summary>
+    /// Die 상태
+    /// </summary>
+    protected virtual void Update_Die()
+    {
+        
+    }
 }
