@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481694, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -169,11 +169,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   seed: -1
   fireMonster: {fileID: 382877156}
---- !u!4 &85440080 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 199559602693685609, guid: 074812939fa663040bc6cdf30113ede0, type: 3}
-  m_PrefabInstance: {fileID: 2034198928}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &382877156 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7476823478783831727, guid: 074812939fa663040bc6cdf30113ede0, type: 3}
@@ -185,68 +180,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 182c5957a3e85034b8a95fd372a36961, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1001 &592930534
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 610019258}
-    m_Modifications:
-    - target: {fileID: 2339372961236591588, guid: f3237c941162fe54ab9be3be66d05371, type: 3}
-      propertyPath: m_Name
-      value: FlameStream
-      objectReference: {fileID: 0}
-    - target: {fileID: 6587536136803381510, guid: f3237c941162fe54ab9be3be66d05371, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6587536136803381510, guid: f3237c941162fe54ab9be3be66d05371, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6587536136803381510, guid: f3237c941162fe54ab9be3be66d05371, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6587536136803381510, guid: f3237c941162fe54ab9be3be66d05371, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6587536136803381510, guid: f3237c941162fe54ab9be3be66d05371, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6587536136803381510, guid: f3237c941162fe54ab9be3be66d05371, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6587536136803381510, guid: f3237c941162fe54ab9be3be66d05371, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6587536136803381510, guid: f3237c941162fe54ab9be3be66d05371, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6587536136803381510, guid: f3237c941162fe54ab9be3be66d05371, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6587536136803381510, guid: f3237c941162fe54ab9be3be66d05371, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: f3237c941162fe54ab9be3be66d05371, type: 3}
---- !u!4 &592930535 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 6587536136803381510, guid: f3237c941162fe54ab9be3be66d05371, type: 3}
-  m_PrefabInstance: {fileID: 592930534}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &594981767
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -299,47 +232,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: 01_Water Monster
       objectReference: {fileID: 0}
-    - target: {fileID: 4227891921044245270, guid: fc33402d9bbb34148a3488aafa21f8da, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fc33402d9bbb34148a3488aafa21f8da, type: 3}
---- !u!1 &610019257
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 610019258}
-  m_Layer: 0
-  m_Name: FirePosition
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &610019258
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 610019257}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0.15812865, y: -0.68919903, z: -0.15812865, w: 0.68919903}
-  m_LocalPosition: {x: -90, y: 50.6, z: -0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 592930535}
-  m_Father: {fileID: 85440080}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &693570456
 GameObject:
   m_ObjectHideFlags: 0
@@ -530,10 +427,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: 04_Light Monster
       objectReference: {fileID: 0}
-    - target: {fileID: 7688510059464060725, guid: 99a7b6fa52c8c824b90af771db7df02e, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -683,10 +576,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: 03_Wind Monster
       objectReference: {fileID: 0}
-    - target: {fileID: 7879890527048427852, guid: bf932a6cb67525a43b7a90f06436947a, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -703,10 +592,6 @@ PrefabInstance:
     - target: {fileID: 5834414330391174428, guid: 074812939fa663040bc6cdf30113ede0, type: 3}
       propertyPath: m_Name
       value: 02_Fire Monster
-      objectReference: {fileID: 0}
-    - target: {fileID: 5834414330391174428, guid: 074812939fa663040bc6cdf30113ede0, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6074452178057266669, guid: 074812939fa663040bc6cdf30113ede0, type: 3}
       propertyPath: m_LocalPosition.x
@@ -750,10 +635,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: 199559602693685609, guid: 074812939fa663040bc6cdf30113ede0, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 610019258}
+    m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 074812939fa663040bc6cdf30113ede0, type: 3}
 --- !u!1001 &2099570406
@@ -767,10 +649,6 @@ PrefabInstance:
     - target: {fileID: 4935554186296833946, guid: 226ff7adcd5f18b458cb0c4f007c1f02, type: 3}
       propertyPath: m_Name
       value: 05_Dark Monster
-      objectReference: {fileID: 0}
-    - target: {fileID: 4935554186296833946, guid: 226ff7adcd5f18b458cb0c4f007c1f02, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7800970568989005516, guid: 226ff7adcd5f18b458cb0c4f007c1f02, type: 3}
       propertyPath: m_LocalPosition.x

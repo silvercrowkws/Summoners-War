@@ -4,31 +4,36 @@ using UnityEngine;
 
 public class FireMonster : MonsterBase
 {
-    ParticleSystem particle;
-
     protected override void Awake()
     {
         base.Awake();
-        particle = GetComponentInChildren<ParticleSystem>();
     }
 
-    private void Start()
+    protected override void Start()
     {
-        
+        base.Start();
     }
 
     protected override void Update_Attack()
     {
-        base.Update_Attack();
-        StartCoroutine(AttackCoroutine());
+        
     }
 
-    IEnumerator AttackCoroutine()
+    /// <summary>
+    /// 애니메이션 이벤트로 파티클 시작
+    /// </summary>
+    void OnParticleStart()
     {
-        animator.SetTrigger("Attack");
-        yield return new WaitForSeconds(0.5f);      // 0.5초 기다리는게 아니라 애니매이션에 클립 넣어서 그 부분에 파티클 실행되게 해야함
-                                                    // AttackStart, AttackEnd 넣어서 2개 넣어서
         particle.Play();
+    }
+
+    /// <summary>
+    /// 애니메이션 이벤트로 파티클 종료
+    /// </summary>
+    void OnParticleStop()
+    {
+        particle.Stop();
+        StartCoroutine(IdleCoroutine());
     }
 
 #if UNITY_EDITOR

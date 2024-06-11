@@ -32,21 +32,25 @@ public class MonsterBase : MonoBehaviour
                         Debug.Log("대기 상태");
                         onMonsterStateChange?.Invoke(state);
                         onMonsterStateUpdate = Update_Idle;
+                        animator.SetTrigger("Idle");
                         break;
                     case MonsterState.Attack:
                         Debug.Log("공격 상태");
                         onMonsterStateChange?.Invoke(state);
                         onMonsterStateUpdate = Update_Attack;
+                        animator.SetTrigger("Attack");
                         break;
                     case MonsterState.GetHit:
                         Debug.Log("피격 상태");
                         onMonsterStateChange?.Invoke(state);
                         onMonsterStateUpdate = Update_GetHit;
+                        animator.SetTrigger("GetHit");
                         break;
                     case MonsterState.Die:
                         Debug.Log("사망 상태");
                         onMonsterStateChange?.Invoke(state);
                         onMonsterStateUpdate = Update_Die;
+                        animator.SetTrigger("Die");
                         break;
                 }
             }
@@ -83,17 +87,25 @@ public class MonsterBase : MonoBehaviour
     /// </summary>
     protected Animator animator;
 
+    /// <summary>
+    /// 파티클
+    /// </summary>
+    protected ParticleSystem particle;
+
     protected virtual void Awake()
     {
         animator = GetComponent<Animator>();
 
+        particle = GetComponentInChildren<ParticleSystem>();
+
         onMonsterStateUpdate = Update_Idle;
     }
 
-    private void Start()
+    protected virtual void Start()
     {
         gameManager = GameManager.Instance;
 
+        Debug.Log($"룬 번호 : {runeDB.runeNumber}");
         //Debug.Log($"룬 체력 : {runeDB.upHP}");
         //Debug.Log($"기본 체력 : {monsterDB.baseHP}");
         //Debug.Log($"합산 체력 : {monsterDB.baseHP * runeDB.upHP}");
@@ -109,7 +121,7 @@ public class MonsterBase : MonoBehaviour
     /// </summary>
     protected virtual void Update_Idle()
     {
-        
+        //animator.SetTrigger("Idle");
     }
 
     /// <summary>
@@ -117,7 +129,7 @@ public class MonsterBase : MonoBehaviour
     /// </summary>
     protected virtual void Update_Attack()
     {
-        Debug.Log("MonsterBase의 Update_Attack 실행");
+        
     }
 
     /// <summary>
@@ -134,5 +146,15 @@ public class MonsterBase : MonoBehaviour
     protected virtual void Update_Die()
     {
         
+    }
+
+    /// <summary>
+    /// Idle 상태로 돌아가기 위한 코루틴
+    /// </summary>
+    /// <returns></returns>
+    protected IEnumerator IdleCoroutine()
+    {
+        State = MonsterState.Idle;
+        yield return null;
     }
 }

@@ -9,13 +9,14 @@ public class DarkMonster : MonsterBase
         base.Awake();
     }
 
-    private void Start()
+    protected override void Start()
     {
-        Debug.Log($"{monsterDB.MonsterName}");
+        base.Start();
+        /*Debug.Log($"{monsterDB.MonsterName}");
         Debug.Log($"{monsterDB.element}");
         Debug.Log($"{monsterDB.monsterType}");
         Debug.Log($"룬 방어력 : {runeDB.upDefense}");
         Debug.Log($"기본 방어력 : {monsterDB.baseDefense}");
-        Debug.Log($"합산 방어력 : {monsterDB.baseDefense * runeDB.upDefense}");
+        Debug.Log($"합산 방어력 : {monsterDB.baseDefense * runeDB.upDefense}");*/
     }
 }
