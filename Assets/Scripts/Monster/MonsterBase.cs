@@ -16,39 +16,39 @@ public class MonsterBase : MonoBehaviour
     /// <summary>
     /// 몬스터의 상태(기본은 Idle)
     /// </summary>
-    MonsterState state = MonsterState.Idle;
+    MonsterState monsterState = MonsterState.Idle;
 
-    public MonsterState State
+    public MonsterState MonsterState
     {
-        get => state;
+        get => monsterState;
         set
         {
-            if(state != value)
+            if(monsterState != value)
             {
-                state = value;
-                switch (state)
+                monsterState = value;
+                switch (monsterState)
                 {
                     case MonsterState.Idle:
                         Debug.Log("대기 상태");
-                        onMonsterStateChange?.Invoke(state);
+                        onMonsterStateChange?.Invoke(monsterState);
                         onMonsterStateUpdate = Update_Idle;
                         animator.SetTrigger("Idle");
                         break;
                     case MonsterState.Attack:
                         Debug.Log("공격 상태");
-                        onMonsterStateChange?.Invoke(state);
+                        onMonsterStateChange?.Invoke(monsterState);
                         onMonsterStateUpdate = Update_Attack;
                         animator.SetTrigger("Attack");
                         break;
                     case MonsterState.GetHit:
                         Debug.Log("피격 상태");
-                        onMonsterStateChange?.Invoke(state);
+                        onMonsterStateChange?.Invoke(monsterState);
                         onMonsterStateUpdate = Update_GetHit;
                         animator.SetTrigger("GetHit");
                         break;
                     case MonsterState.Die:
                         Debug.Log("사망 상태");
-                        onMonsterStateChange?.Invoke(state);
+                        onMonsterStateChange?.Invoke(monsterState);
                         onMonsterStateUpdate = Update_Die;
                         animator.SetTrigger("Die");
                         break;
@@ -172,6 +172,6 @@ public class MonsterBase : MonoBehaviour
     protected IEnumerator IdleCoroutine()
     {
         yield return null;
-        State = MonsterState.Idle;
+        MonsterState = MonsterState.Idle;
     }
 }

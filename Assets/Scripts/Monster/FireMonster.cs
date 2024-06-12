@@ -41,7 +41,7 @@ public class FireMonster : MonsterBase
     public void Test_FireMonster_Attack()
     {
         Debug.Log($"FireMonster가 Attack 상태로 전환");
-        State = MonsterState.Attack;
+        MonsterState = MonsterState.Attack;
     }
 
 #endif

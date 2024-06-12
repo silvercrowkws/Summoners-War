@@ -11,7 +11,7 @@ public class LightMonster : MonsterBase
     public void Test_LightMonster_Attack()
     {
         Debug.Log($"LightMonster가 Attack 상태로 전환");
-        State = MonsterState.Attack;
+        MonsterState = MonsterState.Attack;
     }
 
 #endif

@@ -25,7 +25,7 @@ public class DarkMonster : MonsterBase
     public void Test_DarkMonster_Attack()
     {
         Debug.Log($"DarkMonste가 Attack 상태로 전환");
-        State = MonsterState.Attack;
+        MonsterState = MonsterState.Attack;
     }
 
 #endif

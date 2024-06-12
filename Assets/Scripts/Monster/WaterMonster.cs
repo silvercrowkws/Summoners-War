@@ -42,7 +42,7 @@ public class WaterMonster : MonsterBase
     public void Test_WaterMonster_Attack()
     {
         Debug.Log($"WaterMonster가 Attack 상태로 전환");
-        State = MonsterState.Attack;
+        MonsterState = MonsterState.Attack;
     }
 
 #endif

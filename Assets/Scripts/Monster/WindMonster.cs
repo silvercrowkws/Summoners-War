@@ -11,7 +11,7 @@ public class WindMonster : MonsterBase
     public void Test_WindMonster_Attack()
     {
         Debug.Log($"WindMonster가 Attack 상태로 전환");
-        State = MonsterState.Attack;
+        MonsterState = MonsterState.Attack;
     }
 
 #endif
