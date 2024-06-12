@@ -151,12 +151,12 @@ public class Boss : MonoBehaviour
 
     private void Update_Attack()
     {
-        StartCoroutine(BattleIdleCoroutine());
+        //StartCoroutine(BattleIdleCoroutine());
     }
 
     private void Update_GetHit()
     {
-        StartCoroutine(BattleIdleCoroutine());
+        //StartCoroutine(BattleIdleCoroutine());
     }
 
     private void Update_Sturn()
@@ -209,8 +209,8 @@ public class Boss : MonoBehaviour
     /// <returns></returns>
     protected IEnumerator BattleIdleCoroutine()
     {
-        // 애니메이션 재생 중일 때까지 기다림
-        while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1)
+        // 애니메이션 완료할 때까지 기다림
+        while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= 1.0f)
         {
             yield return null;
         }
