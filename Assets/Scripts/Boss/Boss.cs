@@ -101,9 +101,14 @@ public class Boss : MonoBehaviour
     GameManager gameManager;
 
     /// <summary>
-    /// 파티클
+    /// Attack2일 때 보일 파티클
     /// </summary>
-    ParticleSystem particle;
+    ParticleSystem Attack2Particle;
+
+    /// <summary>
+    /// Attack1일 때 보일 파티클
+    /// </summary>
+    ParticleSystem Attack1Particle;
 
     // 파티클 2개로 늘리고 각자 위치로 찾아야할듯?
     // Attack1Position, Attack2Position 2개 만들어서
@@ -112,7 +117,13 @@ public class Boss : MonoBehaviour
     {
         animator = GetComponent<Animator>();
 
-        particle = GetComponentInChildren<ParticleSystem>();
+        Transform child = transform.GetChild(2);                    // 2번째 자식 AttackPosition
+        child = child.transform.GetChild(0);                        // AttackPosition의 0번째 자식 Attack2Particle
+        Attack2Particle = child.GetComponent<ParticleSystem>();
+        
+        child = transform.GetChild(2);
+        child = child.transform.GetChild(1);                        // AttackPosition의 1번째 자식 Attack1Particle
+        Attack1Particle = child.GetComponent <ParticleSystem>();
 
         onBossStateUpdate = Update_Idle;
     }
@@ -161,17 +172,34 @@ public class Boss : MonoBehaviour
     /// <summary>
     /// 애니메이션 이벤트로 파티클 시작
     /// </summary>
-    private void OnParticleStart()
+    private void OnAttack2ParticleStart()
     {
-        particle.Play();
+        Attack2Particle.Play();
+    }
+
+    /// <summary>
+    /// 애니메이션 이벤트로 파티클 시작
+    /// </summary>
+    private void OnAttack1ParticleStart()
+    {
+        Attack1Particle.Play();
     }
 
     /// <summary>
     /// 애니메이션 이벤트로 파티클 종료
     /// </summary>
-    private void OnParticleStop()
+    private void OnAttack2ParticleStop()
     {
-        particle.Stop();
+        Attack2Particle.Stop();
+        StartCoroutine(BattleIdleCoroutine());
+    }
+
+    /// <summary>
+    /// 애니메이션 이벤트로 파티클 종료
+    /// </summary>
+    private void OnAttack1ParticleStop()
+    {
+        Attack1Particle.Stop();
         StartCoroutine(BattleIdleCoroutine());
     }
 
