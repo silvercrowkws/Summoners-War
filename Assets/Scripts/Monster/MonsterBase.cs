@@ -105,7 +105,7 @@ public class MonsterBase : MonoBehaviour
     {
         gameManager = GameManager.Instance;
 
-        Debug.Log($"룬 번호 : {runeDB.runeNumber}");
+        //Debug.Log($"룬 번호 : {runeDB.runeNumber}");
         //Debug.Log($"룬 체력 : {runeDB.upHP}");
         //Debug.Log($"기본 체력 : {monsterDB.baseHP}");
         //Debug.Log($"합산 체력 : {monsterDB.baseHP * runeDB.upHP}");
