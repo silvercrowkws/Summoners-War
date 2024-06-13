@@ -187,7 +187,10 @@ public class GameManager : Singleton<GameManager>
         Sort();     // 여기서 정렬이 들어가면 2번째에 있던 몬스터가 0번 자리에 들어갈 것임
 
         Debug.Log($"공격 후 맨앞 몬스터의 이름 : {attackGaugeList[0].Monster.name}");
+        Debug.Log($"맨 뒤 몬스터의 공격 게이지 : {attackGaugeList[4].AttackSpeed}");
+        Debug.Log($"맨 뒤 몬스터의 이름 : {attackGaugeList[4].Monster.name}");
         // 54321 순으로 잘 실행되는데 1번까지 오면 5번으로 돌아지기 않는 문제가 있음
+        // 디버그로 보니까 맨 뒤 몬스터가 계속 5번 Dark임
     }
 
 #if UNITY_EDITOR
