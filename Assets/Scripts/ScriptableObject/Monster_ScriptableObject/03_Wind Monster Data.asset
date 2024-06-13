@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MonsterName: Wind
   MonsterText: "\uD48D\uC18D\uC131 \uBAAC\uC2A4\uD130\uC774\uB2E4"
-  element: 3
+  element: 0
   monsterType: 2
   baseAttackPower: 10
   baseDefense: 10

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MonsterName: Fire
   MonsterText: "\uBD88\uC18D\uC131 \uBAAC\uC2A4\uD130\uC774\uB2E4"
-  element: 2
+  element: 0
   monsterType: 1
   baseAttackPower: 10
   baseDefense: 20

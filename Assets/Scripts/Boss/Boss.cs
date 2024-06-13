@@ -110,9 +110,6 @@ public class Boss : MonoBehaviour
     /// </summary>
     ParticleSystem Attack1Particle;
 
-    // 파티클 2개로 늘리고 각자 위치로 찾아야할듯?
-    // Attack1Position, Attack2Position 2개 만들어서
-
     private void Awake()
     {
         animator = GetComponent<Animator>();
@@ -126,6 +123,8 @@ public class Boss : MonoBehaviour
         Attack1Particle = child.GetComponent <ParticleSystem>();
 
         onBossStateUpdate = Update_Idle;
+
+        this.gameObject.transform.position = new Vector3(0, 0, 0);
     }
 
     private void Start()

@@ -70,12 +70,14 @@ public class MonsterBase : MonoBehaviour
     /// <summary>
     /// 룬 정보(인스펙터에서 할당)
     /// </summary>
-    public RuneDB runeDB;
+    [SerializeField]
+    protected RuneDB runeDB;
 
     /// <summary>
     /// 몬스터 정보(인스펙터에서 할당)
     /// </summary>
-    public MonsterDB monsterDB;
+    [SerializeField]
+    protected MonsterDB monsterDB;
 
     /// <summary>
     /// 게임 매니저
@@ -92,6 +94,21 @@ public class MonsterBase : MonoBehaviour
     /// </summary>
     protected ParticleSystem particle;
 
+    /// <summary>
+    /// 몬스터들의 기본 공격속도 + 룬으로 올라가는 공격 속도
+    /// </summary>
+    public float totalAttackSpeed;
+
+    /// <summary>
+    /// 이 몬스터의 현재 공격 게이지
+    /// </summary>
+    public float attackGauge;
+
+    /// <summary>
+    /// 공격 가능한지 확인하는 bool 변수
+    /// </summary>
+    public bool attackEnable = false;
+
     protected virtual void Awake()
     {
         animator = GetComponent<Animator>();
@@ -99,12 +116,14 @@ public class MonsterBase : MonoBehaviour
         particle = GetComponentInChildren<ParticleSystem>();
 
         onMonsterStateUpdate = Update_Idle;
+
+        totalAttackSpeed = monsterDB.baseAttackSpeed + runeDB.upAttackSpeed;
     }
 
     protected virtual void Start()
     {
         gameManager = GameManager.Instance;
-
+        gameManager.onAttackReady += OnAttackReady;
         //Debug.Log($"룬 번호 : {runeDB.runeNumber}");
         //Debug.Log($"룬 체력 : {runeDB.upHP}");
         //Debug.Log($"기본 체력 : {monsterDB.baseHP}");
@@ -173,5 +192,25 @@ public class MonsterBase : MonoBehaviour
     {
         yield return null;
         MonsterState = MonsterState.Idle;
+    }
+
+    /// <summary>
+    /// Attakc 상태로 돌아가기 위한 코루틴
+    /// </summary>
+    /// <returns></returns>
+    protected IEnumerator AttackCoroutine()
+    {
+        yield return null;
+        MonsterState = MonsterState.Attack;
+    }
+
+
+    private void OnAttackReady()
+    {
+        if (attackEnable)                           // 공격이 가능하면
+        {
+            StartCoroutine(AttackCoroutine());      // 코루틴으로 공격 상태로 변경
+            attackEnable = false;
+        }
     }
 }

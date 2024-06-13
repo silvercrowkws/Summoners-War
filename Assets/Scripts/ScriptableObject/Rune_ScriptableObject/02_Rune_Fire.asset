@@ -17,4 +17,4 @@ MonoBehaviour:
   upAttack: 2
   upDefense: 5
   upHP: 2
-  upAttackSpeed: 2
+  upAttackSpeed: 20

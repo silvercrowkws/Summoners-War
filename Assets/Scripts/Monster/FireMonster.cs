@@ -4,14 +4,21 @@ using UnityEngine;
 
 public class FireMonster : MonsterBase
 {
+    /// <summary>
+    /// 합산 공격 속도
+    /// </summary>
+    //public float totalAttackSpeed;
+
     protected override void Awake()
     {
         base.Awake();
+        //totalAttackSpeed = monsterDB.baseAttackSpeed + runeDB.upAttackSpeed;
     }
 
     protected override void Start()
     {
         base.Start();
+        //Debug.Log($"Fire 합산 공속 : {totalAttackSpeed}");
     }
 
     protected override void Update_Attack()
