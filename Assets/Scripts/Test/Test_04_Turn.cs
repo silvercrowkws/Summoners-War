@@ -17,7 +17,7 @@ public class Test_04_Turn : TestBase
         Debug.Log("2번 클릭");
 
         TurnManager turnManager = FindAnyObjectByType<TurnManager>();
-        turnManager.OnTurnEnd();
+        turnManager.OnTurnEnd2();
     }
 
     protected override void OnTest3(InputAction.CallbackContext context)

@@ -46,6 +46,15 @@ public class TurnManager : MonoBehaviour
     /// </summary>
     bool isEndProcess = false;
 
+    MonsterBase monsterBase;
+
+    private void Start()
+    {
+        monsterBase = FindAnyObjectByType<MonsterBase>();
+
+        //monsterBase.onAttacked += OnTurnEnd;
+    }
+
     /// <summary>
     /// 씬이 시작될 때 초기화
     /// </summary>
@@ -83,19 +92,35 @@ public class TurnManager : MonoBehaviour
     /// <summary>
     /// 턴 종료 처리용 함수
     /// </summary>
-    public void OnTurnEnd()
+    void OnTurnEnd()
     {
         if (isTurnEnable)    // 턴 매니저가 작동 중이면
         {
-            //if (공격을 완료했으면)
-            {
-                isEndProcess = true;    // 종료 처리 중이라고 표시
-                onTurnEnd?.Invoke();    // 턴이 종료되었다고 알림
-                Debug.Log($"{turnNumber}턴 종료");
+            isEndProcess = true;    // 종료 처리 중이라고 표시
+            onTurnEnd?.Invoke();    // 턴이 종료되었다고 알림
+            Debug.Log($"{turnNumber}턴 종료");
 
-                isEndProcess = false;   // 종료 처리가 끝났다고 표시
-                OnTurnStart();          // 다음 턴 시작
-            }
+            isEndProcess = false;   // 종료 처리가 끝났다고 표시
+            OnTurnStart();          // 다음 턴 시작
         }
+    }
+
+
+
+    /// 지금 문제가
+    /// 1. a 키를 눌러서 공격이 실행되는 것 => 첫번째 몬스터만 작동하고
+    /// 2. 첫번째 몬스터 공격 후 2번째 3번째 몬스터도 이어서 공격함 <summary>
+    /// 3. 근데 또 웃긴건 3번째 몹 공격후 다시 1번째 몹이 공격하는 것은 a 눌러야되는데
+    /// 4. 다음 몹은 공격 안함 ㅋㅋㅋㅋ
+    /// 4. 인풋 매니저의 A 키 누르는 것이 5번 발동되서 나는 문제 같기도 하고..
+    /// 5. Update_Attack을 A 키 누를때마다 실행되서 문제거나
+    /// 6. onBossClick 변수 쪽이 문제 같기도 하고...
+
+
+
+
+    public void OnTurnEnd2()
+    {
+        OnTurnEnd();
     }
 }

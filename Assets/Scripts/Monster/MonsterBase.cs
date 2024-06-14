@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public enum MonsterState
 {
@@ -43,7 +45,6 @@ public class MonsterBase : MonoBehaviour
                         Debug.Log("공격 상태");
                         onMonsterStateChange?.Invoke(monsterState);
                         onMonsterStateUpdate = Update_Attack;
-                        aaa?.Invoke();
                         //animator.SetTrigger("Attack");
                         break;
                     case MonsterState.GetHit:
@@ -72,6 +73,11 @@ public class MonsterBase : MonoBehaviour
     /// 몬스터의 상태별로 행동으로 전환하는 델리게이트
     /// </summary>
     public Action onMonsterStateUpdate;
+
+    /// <summary>
+    /// 공격을 완료하여 다음 턴으로 넘어가야 한다고 알리는 델리게이트
+    /// </summary>
+    public Action onAttacked;
 
     /// <summary>
     /// 룬 정보(인스펙터에서 할당)
@@ -115,6 +121,16 @@ public class MonsterBase : MonoBehaviour
     /// </summary>
     public bool attackEnable;
 
+    /// <summary>
+    /// 플레이어 인풋 액션
+    /// </summary>
+    public PlayerInputActions inputAction;
+
+    /// <summary>
+    /// 턴 매니저
+    /// </summary>
+    TurnManager turnManager;
+
     protected virtual void Awake()
     {
         animator = GetComponent<Animator>();
@@ -124,16 +140,34 @@ public class MonsterBase : MonoBehaviour
         onMonsterStateUpdate = Update_Idle;
 
         totalAttackSpeed = monsterDB.baseAttackSpeed + runeDB.upAttackSpeed;
+
+        inputAction = new PlayerInputActions();
     }
 
     private void OnEnable()
     {
         gameManager = GameManager.Instance;
         gameManager.onAttackReady += OnAttackReady;
+
+        inputAction.Input.Enable();
+        inputAction.Input.Attack.canceled += OnAttackAble;      // 이것도 누를때마다 실행되서 변수 계속 바꾸는 문제가 있음
+    }
+
+    private void OnDisable()
+    {
+        inputAction.Input.Attack.canceled -= OnAttackAble;
+        inputAction.Input.Disable();
+    }
+
+    private void OnAttackAble(InputAction.CallbackContext context)
+    {
+        Debug.Log("A 를 눌러서 OnAttackAble 활성화");      // 이게 5번이나 실행되는 이유가 뭘까? 횟수도 항상 같은데
+        onBossClick = true;
     }
 
     protected virtual void Start()
     {
+        turnManager = FindAnyObjectByType<TurnManager>();
         //gameManager = GameManager.Instance;
         //gameManager.onAttackReady += OnAttackReady;
         //Debug.Log($"룬 번호 : {runeDB.runeNumber}");
@@ -163,6 +197,8 @@ public class MonsterBase : MonoBehaviour
         if (onBossClick)
         {
             animator.SetTrigger("Attack");
+            Debug.Log("공격 애니메이션 실행");
+            onBossClick = false;
         }
     }
 
@@ -205,8 +241,18 @@ public class MonsterBase : MonoBehaviour
     /// <returns></returns>
     protected IEnumerator IdleCoroutine()
     {
-        yield return null;
+        // 애니메이션 완료할 때까지 기다림
+        while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= 1.0f)
+        {
+            yield return null;
+        }
+
+        //yield return null;
+        Debug.Log("IdleCoroutine 실행");
+        //onBossClick = false;
         MonsterState = MonsterState.Idle;
+        turnManager.OnTurnEnd2();
+        //onAttacked?.Invoke();       // 이 델리게이트가 null이라 신호를 못보내는 문제가 있음
     }
 
     /// <summary>
@@ -218,7 +264,7 @@ public class MonsterBase : MonoBehaviour
         if (attackEnable)                           // 공격이 가능하면
         {
             yield return null;
-            Debug.Log("AttackCoroutine 에서 MonsterState를 Attack으로 바꿈");
+            Debug.Log("AttackCoroutine 실행");
             MonsterState = MonsterState.Attack;
             //attackEnable = false;                   // 공격 후 공격 가능 상태 비활성화
         }
@@ -234,6 +280,4 @@ public class MonsterBase : MonoBehaviour
             attackEnable = false;                   // 공격 후 공격 가능 상태 비활성화
         }
     }
-
-    public Action aaa;
 }
