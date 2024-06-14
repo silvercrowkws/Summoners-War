@@ -115,6 +115,7 @@ public class TurnManager : MonoBehaviour
     /// 4. 인풋 매니저의 A 키 누르는 것이 5번 발동되서 나는 문제 같기도 하고..
     /// 5. Update_Attack을 A 키 누를때마다 실행되서 문제거나
     /// 6. onBossClick 변수 쪽이 문제 같기도 하고...
+    /// 7. 아니면 IdleCoroutine 코루틴에서 OnTurnEnd2 이거 직접 때려박아서?
 
 
 
