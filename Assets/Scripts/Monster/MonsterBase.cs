@@ -102,7 +102,7 @@ public class MonsterBase : MonoBehaviour
     /// <summary>
     /// 이 몬스터의 현재 공격 게이지
     /// </summary>
-    public float attackGauge;
+    //public float attackGauge;
 
     /// <summary>
     /// 공격 가능한지 확인하는 bool 변수
@@ -210,7 +210,7 @@ public class MonsterBase : MonoBehaviour
         if (attackEnable)                           // 공격이 가능하면
         {
             StartCoroutine(AttackCoroutine());      // 코루틴으로 공격 상태로 변경
-            attackEnable = false;
+            attackEnable = false;                   // 공격 후 공격 가능 상태 비활성화
         }
     }
 }
