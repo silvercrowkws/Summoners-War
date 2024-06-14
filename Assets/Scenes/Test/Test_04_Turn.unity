@@ -844,6 +844,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1407647913}
     - target: {fileID: 2944296060755104611, guid: 7fbcd4d9e9ce3954cb7d0b902a2dee5b, type: 3}
+      propertyPath: turnManager
+      value: 
+      objectReference: {fileID: 1854126731}
+    - target: {fileID: 2944296060755104611, guid: 7fbcd4d9e9ce3954cb7d0b902a2dee5b, type: 3}
       propertyPath: windMonster
       value: 
       objectReference: {fileID: 2133686708}

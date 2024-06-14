@@ -18,6 +18,11 @@ public class MonsterBase : MonoBehaviour
     /// </summary>
     MonsterState monsterState = MonsterState.Idle;
 
+    /// <summary>
+    /// 보스를 눌러서 공격했는지 확인하는 변수
+    /// </summary>
+    protected bool onBossClick;
+
     public MonsterState MonsterState
     {
         get => monsterState;
@@ -38,7 +43,8 @@ public class MonsterBase : MonoBehaviour
                         Debug.Log("공격 상태");
                         onMonsterStateChange?.Invoke(monsterState);
                         onMonsterStateUpdate = Update_Attack;
-                        animator.SetTrigger("Attack");
+                        aaa?.Invoke();
+                        //animator.SetTrigger("Attack");
                         break;
                     case MonsterState.GetHit:
                         Debug.Log("피격 상태");
@@ -107,7 +113,7 @@ public class MonsterBase : MonoBehaviour
     /// <summary>
     /// 공격 가능한지 확인하는 bool 변수
     /// </summary>
-    public bool attackEnable = false;
+    public bool attackEnable;
 
     protected virtual void Awake()
     {
@@ -120,10 +126,16 @@ public class MonsterBase : MonoBehaviour
         totalAttackSpeed = monsterDB.baseAttackSpeed + runeDB.upAttackSpeed;
     }
 
-    protected virtual void Start()
+    private void OnEnable()
     {
         gameManager = GameManager.Instance;
         gameManager.onAttackReady += OnAttackReady;
+    }
+
+    protected virtual void Start()
+    {
+        //gameManager = GameManager.Instance;
+        //gameManager.onAttackReady += OnAttackReady;
         //Debug.Log($"룬 번호 : {runeDB.runeNumber}");
         //Debug.Log($"룬 체력 : {runeDB.upHP}");
         //Debug.Log($"기본 체력 : {monsterDB.baseHP}");
@@ -148,7 +160,10 @@ public class MonsterBase : MonoBehaviour
     /// </summary>
     protected virtual void Update_Attack()
     {
-        
+        if (onBossClick)
+        {
+            animator.SetTrigger("Attack");
+        }
     }
 
     /// <summary>
@@ -200,17 +215,25 @@ public class MonsterBase : MonoBehaviour
     /// <returns></returns>
     protected IEnumerator AttackCoroutine()
     {
-        yield return null;
-        MonsterState = MonsterState.Attack;
+        if (attackEnable)                           // 공격이 가능하면
+        {
+            yield return null;
+            Debug.Log("AttackCoroutine 에서 MonsterState를 Attack으로 바꿈");
+            MonsterState = MonsterState.Attack;
+            //attackEnable = false;                   // 공격 후 공격 가능 상태 비활성화
+        }
     }
 
 
-    private void OnAttackReady()
+    public void OnAttackReady()
     {
         if (attackEnable)                           // 공격이 가능하면
         {
+            Debug.Log("공격 가능 코루틴 시작");
             StartCoroutine(AttackCoroutine());      // 코루틴으로 공격 상태로 변경
             attackEnable = false;                   // 공격 후 공격 가능 상태 비활성화
         }
     }
+
+    public Action aaa;
 }

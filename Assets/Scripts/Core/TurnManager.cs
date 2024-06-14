@@ -56,11 +56,12 @@ public class TurnManager : MonoBehaviour
         turnState = TurnProcessState.Idle;      // 턴 진행 상태 초기화
         isTurnEnable = true;                    // 턴 켜기
 
-        onTurnStart = null;                     // 델리게이트 초기화        
-        onTurnEnd = null;
+        //onTurnStart = null;                     // 델리게이트 초기화        
+        //onTurnEnd = null;
 
         //Debug.Log("OnInitialize 호출");
         OnTurnStart();                          // 턴 시작
+        // OnTurnStart를 바로 걸지 말고 처음에 뭔가 하고 나서 타이밍 걸어서 시작되게 해야할듯
     }
 
     /// <summary>
@@ -74,6 +75,7 @@ public class TurnManager : MonoBehaviour
             Debug.Log($"{turnNumber}턴 시작");
             turnState = TurnProcessState.Start;     // 턴 시작 상태
 
+            //Debug.Log("onTurnStart 델리게이트 보냄");
             onTurnStart?.Invoke(turnNumber);        // 턴이 시작되었음을 알림
         }
     }
@@ -81,7 +83,7 @@ public class TurnManager : MonoBehaviour
     /// <summary>
     /// 턴 종료 처리용 함수
     /// </summary>
-    void OnTurnEnd()
+    public void OnTurnEnd()
     {
         if (isTurnEnable)    // 턴 매니저가 작동 중이면
         {
