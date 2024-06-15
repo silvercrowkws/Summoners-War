@@ -90,6 +90,11 @@ public class GameManager : Singleton<GameManager>
         attackGaugeList.Sort((info1, info2) => info2.AttackSpeed.CompareTo(info1.AttackSpeed));
         Debug.Log("공격게이지 재정렬");
 
+        /*foreach(var monsterInfo in attackGaugeList)
+        {
+            Debug.Log($"정렬 후 몬스터 순서{monsterInfo.Monster.name}");
+        }*/
+
         /*foreach (var monsterInfo in attackGaugeList)
         {
             Debug.Log($"재정렬 후 {monsterInfo.Monster.name}의 공격 속도 : {monsterInfo.AttackSpeed}");
@@ -131,9 +136,34 @@ public class GameManager : Singleton<GameManager>
     /// </summary>
     void GaugeControll()
     {
+        // 기본적으로 공격 전에 리스트에 있는 모든 몬스터의
+        // attackGaugeList[i].Monster.attackEnable = false; 해줘야?
+
         // 첫 번째 요소가 100이 되도록 설정
         if (attackGaugeList.Count > 0)
         {
+            /// 시작하기 전에 정렬 한번 하고 => 공격 속도 별로 내림차순 정렬(큰 숫자가 앞)
+            /// 첫 번째 몬스터의 정보를 추출한 다음
+            /// 첫 번째 몬스터의 공격 속도를 따로 저장해 놓고
+            /// 첫 번째 몬스터의 공격 게이지를 100으로 올릴 때 발생하는 비율을 저장한 다음
+            /// 첫 번째 몬스터의 공격 게이지를 100으로 조정
+            /// 첫 번째 몬스터의 공격 가능 변수를 true로 변경하고
+            /// 나머지 몬스터들도 그 비율에 맞게 공격 게이지 조정한다
+            /// 그러면서 나머지 몬스터의 공격 가능 변수를 false로 변경하고
+            /// 다시 정렬한다
+            /// onAttackReady 델리게이트로 MonsterBase 에서 A키와 연결하여
+            /// 본인이 리스트의 맨 앞에 있는 몬스터일 경우 A키로 onBossClick(보스를 공격할 수 있다) 변수를 true로 바꾸어서
+            /// Update_Attack에서 애니메이션이 실행되게 하고 있다.
+            /// 마지막으로 첫 번째 몬스터의 공격 게이지를 totalAttackSpeed 로 초기화
+            /// 
+            /// 이 함수는 OnAttackGaugeUpdate 에서 실행되는데
+            /// OnAttackGaugeUpdate 함수는 턴 매니저의 onTurnStart 델리게이트의 신호를 받아서 실행되고 있고
+            /// onTurnStart는 턴 매니저의 OnInitialize에서 실행하고
+            /// 턴 매니저의 OnInitialize 함수는 게임 매니저의 Start에서 실행하여
+            /// 게임이 시작되자 마자 1턴을 얻어
+            /// 리스트의 0 번째 몬스터는 바로 공격 할 수 있는 기회를 가진다
+
+            Sort();
             Debug.Log("GaugeControll 실행");
             MonsterInfo firstMonster = attackGaugeList[0];      // 첫 번째 몬스터 정보 추출
             float firstElement = firstMonster.AttackSpeed;      // 첫 번째 몬스터의 공격 속도
@@ -141,21 +171,24 @@ public class GameManager : Singleton<GameManager>
             float adjustmentRatio = 100.0f / firstElement;      // 100으로 올릴 때 발생하는 비율
 
             // 첫 번째 요소를 100으로 조정
-            attackGaugeList[0].AttackSpeed = 100.0f;
-            Debug.Log($"현재 턴을 가진{attackGaugeList[0].Monster.name}의 공격 게이지 : {attackGaugeList[0].AttackSpeed} 으로 조정");
+            attackGaugeList[0].AttackSpeed = 100.0f;            // 공격 게이지와 공격 스피드가 좀 혼용되서 사용되고 있음
+            attackGaugeList[0].Monster.attackEnable = true;
+            Debug.Log($"리스트 0번 {attackGaugeList[0].Monster.name}의 공격 가능 여부 : {attackGaugeList[0].Monster.attackEnable}");
+            //Debug.Log($"현재 턴을 가진{attackGaugeList[0].Monster.name}의 공격 게이지 : {attackGaugeList[0].AttackSpeed} 으로 조정");
 
             // 나머지 몬스터들을 첫 번째 몬스터의 비율에 맞게 조정
             for (int i = 1; i < attackGaugeList.Count; i++)
             {
                 attackGaugeList[i].AttackSpeed *= adjustmentRatio;
-                Debug.Log($"{i}번째로 턴을 가질 {attackGaugeList[i].Monster.name}의 조정된 공격 게이지 : {attackGaugeList[i].AttackSpeed}");
+                //Debug.Log($"{i}번째로 턴을 가질 {attackGaugeList[i].Monster.name}의 조정된 공격 게이지 : {attackGaugeList[i].AttackSpeed}");
+                attackGaugeList[i].Monster.attackEnable = false;
+                Debug.Log($"나머지 몬스터 {attackGaugeList[i].Monster.name} 의 공격 가능 여부 : {attackGaugeList[i].Monster.attackEnable}");
             }
+            Sort();
         }
 
-        Sort();
-
         Debug.Log($"맨 앞 {attackGaugeList[0].Monster.name} 몬스터의 공격 가능");
-        attackGaugeList[0].Monster.attackEnable = true;
+        //attackGaugeList[0].Monster.attackEnable = true;
         Debug.Log($"{attackGaugeList[0].Monster.attackEnable}");
         onAttackReady?.Invoke();        // 공격이 가능하다고 알림
 
@@ -169,8 +202,7 @@ public class GameManager : Singleton<GameManager>
         attackGaugeList[0].AttackSpeed = firstMonsterAttackSpeed;
         //Debug.Log($"초기화 전 0번 몬스터의 공속 : {attackGaugeList[0].Monster.totalAttackSpeed}");
 
-        Sort();     // 여기서 정렬이 들어가면 2번째에 있던 몬스터가 0번 자리에 들어갈 것임
-
+        //Sort();     // 여기서 정렬이 들어가면 2번째에 있던 몬스터가 0번 자리에 들어갈 것임
         //Debug.Log($"공격 후 맨앞 몬스터의 이름 : {attackGaugeList[0].Monster.name}");
         //Debug.Log($"맨 뒤 몬스터의 공격 게이지 : {attackGaugeList[4].AttackSpeed}");
         //Debug.Log($"맨 뒤 몬스터의 이름 : {attackGaugeList[4].Monster.name}");

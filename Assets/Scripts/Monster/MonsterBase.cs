@@ -40,12 +40,14 @@ public class MonsterBase : MonoBehaviour
                         onMonsterStateChange?.Invoke(monsterState);
                         onMonsterStateUpdate = Update_Idle;
                         animator.SetTrigger("Idle");
+                        //attackProcessed = false;  // 여기서 attackProcessed를 초기화 // 여기 변경됨
                         break;
                     case MonsterState.Attack:
                         Debug.Log("공격 상태");
                         onMonsterStateChange?.Invoke(monsterState);
                         onMonsterStateUpdate = Update_Attack;
                         //animator.SetTrigger("Attack");
+                        attackProcessed = false;
                         break;
                     case MonsterState.GetHit:
                         Debug.Log("피격 상태");
@@ -75,11 +77,6 @@ public class MonsterBase : MonoBehaviour
     public Action onMonsterStateUpdate;
 
     /// <summary>
-    /// 공격을 완료하여 다음 턴으로 넘어가야 한다고 알리는 델리게이트
-    /// </summary>
-    public Action onAttacked;
-
-    /// <summary>
     /// 룬 정보(인스펙터에서 할당)
     /// </summary>
     [SerializeField]
@@ -94,7 +91,7 @@ public class MonsterBase : MonoBehaviour
     /// <summary>
     /// 게임 매니저
     /// </summary>
-    GameManager gameManager;
+    public GameManager gameManager;
 
     /// <summary>
     /// 애니메이터
@@ -150,19 +147,15 @@ public class MonsterBase : MonoBehaviour
         gameManager.onAttackReady += OnAttackReady;
 
         inputAction.Input.Enable();
-        inputAction.Input.Attack.canceled += OnAttackAble;      // 이것도 누를때마다 실행되서 변수 계속 바꾸는 문제가 있음
+        //inputAction.Input.Attack.canceled += OnAttackAble;          // 이것도 누를때마다 실행되서 변수 계속 바꾸는 문제가 있음
+        inputAction.Input.Attack.performed += OnAttackAble;         // 또는 canceled 대신 performed로 설정
     }
 
     private void OnDisable()
     {
-        inputAction.Input.Attack.canceled -= OnAttackAble;
+        inputAction.Input.Attack.performed -= OnAttackAble;
+        //inputAction.Input.Attack.canceled -= OnAttackAble;
         inputAction.Input.Disable();
-    }
-
-    private void OnAttackAble(InputAction.CallbackContext context)
-    {
-        Debug.Log("A 를 눌러서 OnAttackAble 활성화");      // 이게 5번이나 실행되는 이유가 뭘까? 횟수도 항상 같은데
-        onBossClick = true;
     }
 
     protected virtual void Start()
@@ -187,20 +180,40 @@ public class MonsterBase : MonoBehaviour
     protected virtual void Update_Idle()
     {
         //animator.SetTrigger("Idle");
+        attackProcessed = true;
     }
+
+    private bool attackProcessed = false;
 
     /// <summary>
     /// Attack 상태
     /// </summary>
     protected virtual void Update_Attack()
     {
-        if (onBossClick)
+        //if (monsterState == MonsterState.Attack && onBossClick && !attackProcessed)
+        if (onBossClick && !attackProcessed)
         {
             animator.SetTrigger("Attack");
             Debug.Log("공격 애니메이션 실행");
+            attackProcessed = true;  // 여기 변경됨
             onBossClick = false;
+            // 나중에 여기서 공격 로직 부분 추가 필요
         }
     }
+
+    protected virtual void OnAttackAble(InputAction.CallbackContext context)
+    {
+        if (this.gameObject.name == gameManager.attackGaugeList[0].Monster.name)        // 본인이 리스트의 맨 앞에 있는 몬스터이면
+        {
+            Debug.Log($"{gameManager.attackGaugeList[0].Monster.name}의 onBossClick = true");
+            //Debug.Log("A 를 눌러서 OnAttackAble 활성화");      // 이게 5번이나 실행되는 이유가 뭘까? 횟수도 항상 같은데
+            onBossClick = true;
+            OnDisable();
+        }
+        // A키를 연타하면 계속 디버그가 출력됨
+        // 처음에 한번만 눌러서 작동하게 OnDisable을 해버려야?
+    }
+
 
     /// <summary>
     /// GetHit 상태
@@ -251,8 +264,8 @@ public class MonsterBase : MonoBehaviour
         Debug.Log("IdleCoroutine 실행");
         //onBossClick = false;
         MonsterState = MonsterState.Idle;
+        OnEnable();
         turnManager.OnTurnEnd2();
-        //onAttacked?.Invoke();       // 이 델리게이트가 null이라 신호를 못보내는 문제가 있음
     }
 
     /// <summary>

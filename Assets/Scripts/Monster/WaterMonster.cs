@@ -5,14 +5,9 @@ using UnityEngine;
 public class WaterMonster : MonsterBase
 {
     /// <summary>
-    /// 공격 위치
+    /// 공격 위치(얘는 처음 시작할 때 머리 위에 오브가 보여서 Base에서 안하고 따로 함)
     /// </summary>
     Transform attackPosition;
-
-    /// <summary>
-    /// 합산 공격 속도
-    /// </summary>
-    //public float totalAttackSpeed;
 
     protected override void Awake()
     {

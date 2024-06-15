@@ -51,8 +51,6 @@ public class TurnManager : MonoBehaviour
     private void Start()
     {
         monsterBase = FindAnyObjectByType<MonsterBase>();
-
-        //monsterBase.onAttacked += OnTurnEnd;
     }
 
     /// <summary>
@@ -105,21 +103,9 @@ public class TurnManager : MonoBehaviour
         }
     }
 
-
-
-    /// 지금 문제가
-    /// 1. a 키를 눌러서 공격이 실행되는 것 => 첫번째 몬스터만 작동하고
-    /// 2. 첫번째 몬스터 공격 후 2번째 3번째 몬스터도 이어서 공격함 <summary>
-    /// 3. 근데 또 웃긴건 3번째 몹 공격후 다시 1번째 몹이 공격하는 것은 a 눌러야되는데
-    /// 4. 다음 몹은 공격 안함 ㅋㅋㅋㅋ
-    /// 4. 인풋 매니저의 A 키 누르는 것이 5번 발동되서 나는 문제 같기도 하고..
-    /// 5. Update_Attack을 A 키 누를때마다 실행되서 문제거나
-    /// 6. onBossClick 변수 쪽이 문제 같기도 하고...
-    /// 7. 아니면 IdleCoroutine 코루틴에서 OnTurnEnd2 이거 직접 때려박아서?
-
-
-
-
+    /// <summary>
+    /// OnTurnEnd를 사용하기 위한 public 함수
+    /// </summary>
     public void OnTurnEnd2()
     {
         OnTurnEnd();
