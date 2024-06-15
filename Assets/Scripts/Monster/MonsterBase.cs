@@ -293,4 +293,7 @@ public class MonsterBase : MonoBehaviour
             attackEnable = false;                   // 공격 후 공격 가능 상태 비활성화
         }
     }
+
+    /// attackTarget을 만들어서 Update_Attack 부분에 attackTarget을 공격하는 부분이 필요
+    /// Boss는 몬스터의 공격을 받으면 Update_GetHit 상태로 넘어가서 맞는 부분이 필요할 듯
 }
