@@ -294,6 +294,7 @@ public class MonsterBase : MonoBehaviour
         }
     }
 
+    /// 아래 보다는 공격게이지를 보여주는 UI가 먼저일 듯
     /// attackTarget을 만들어서 Update_Attack 부분에 attackTarget을 공격하는 부분이 필요
     /// Boss는 몬스터의 공격을 받으면 Update_GetHit 상태로 넘어가서 맞는 부분이 필요할 듯
 }

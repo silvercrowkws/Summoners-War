@@ -124,7 +124,7 @@ public class Boss : MonoBehaviour
 
         onBossStateUpdate = Update_Idle;
 
-        this.gameObject.transform.position = new Vector3(0, 0, 0);
+        //this.gameObject.transform.position = new Vector3(0, 0, 0);
     }
 
     private void Start()
