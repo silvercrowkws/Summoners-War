@@ -16,5 +16,5 @@ MonoBehaviour:
   runeNumber: 3
   upAttack: 2
   upDefense: 2
-  upHP: 5
+  upHP: 3
   upAttackSpeed: 30

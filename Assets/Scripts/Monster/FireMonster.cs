@@ -14,6 +14,7 @@ public class FireMonster : MonsterBase
     {
         base.Start();
         //Debug.Log($"Fire 합산 공속 : {totalAttackSpeed}");
+        Debug.Log($"Fire 합산 체력 : {monsterDB.baseHP * runeDB.upHP}");
     }
 
 #if UNITY_EDITOR

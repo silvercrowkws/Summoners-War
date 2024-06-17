@@ -91,7 +91,7 @@ public class MonsterBase : MonoBehaviour
     /// <summary>
     /// 게임 매니저
     /// </summary>
-    public GameManager gameManager;
+    GameManager gameManager;
 
     /// <summary>
     /// 애니메이터
@@ -165,7 +165,7 @@ public class MonsterBase : MonoBehaviour
         //gameManager.onAttackReady += OnAttackReady;
         //Debug.Log($"룬 번호 : {runeDB.runeNumber}");
         //Debug.Log($"룬 체력 : {runeDB.upHP}");
-        //Debug.Log($"기본 체력 : {monsterDB.baseHP}");
+        //Debug.Log($"기본 체력 : {monsterDB.baseHP}");        
         //Debug.Log($"합산 체력 : {monsterDB.baseHP * runeDB.upHP}");
     }
 
@@ -197,7 +197,9 @@ public class MonsterBase : MonoBehaviour
             Debug.Log("공격 애니메이션 실행");
             attackProcessed = true;  // 여기 변경됨
             onBossClick = false;
+
             // 나중에 여기서 공격 로직 부분 추가 필요
+            // attackTarget의 HP를 깎는 부분
         }
     }
 
@@ -208,7 +210,7 @@ public class MonsterBase : MonoBehaviour
             Debug.Log($"{gameManager.attackGaugeList[0].Monster.name}의 onBossClick = true");
             //Debug.Log("A 를 눌러서 OnAttackAble 활성화");      // 이게 5번이나 실행되는 이유가 뭘까? 횟수도 항상 같은데
             onBossClick = true;
-            OnDisable();
+            OnDisable();            // 움직임 비활성화
         }
         // A키를 연타하면 계속 디버그가 출력됨
         // 처음에 한번만 눌러서 작동하게 OnDisable을 해버려야?
@@ -261,10 +263,10 @@ public class MonsterBase : MonoBehaviour
         }
 
         //yield return null;
-        Debug.Log("IdleCoroutine 실행");
+        //Debug.Log("IdleCoroutine 실행");
         //onBossClick = false;
         MonsterState = MonsterState.Idle;
-        OnEnable();
+        OnEnable();                             // 다시 움직임 활성화
         turnManager.OnTurnEnd2();
     }
 
@@ -277,7 +279,7 @@ public class MonsterBase : MonoBehaviour
         if (attackEnable)                           // 공격이 가능하면
         {
             yield return null;
-            Debug.Log("AttackCoroutine 실행");
+            //Debug.Log("AttackCoroutine 실행");
             MonsterState = MonsterState.Attack;
             //attackEnable = false;                   // 공격 후 공격 가능 상태 비활성화
         }
@@ -288,13 +290,12 @@ public class MonsterBase : MonoBehaviour
     {
         if (attackEnable)                           // 공격이 가능하면
         {
-            Debug.Log("공격 가능 코루틴 시작");
+            //Debug.Log("공격 가능 코루틴 시작");
             StartCoroutine(AttackCoroutine());      // 코루틴으로 공격 상태로 변경
             attackEnable = false;                   // 공격 후 공격 가능 상태 비활성화
         }
     }
-
-    /// 아래 보다는 공격게이지를 보여주는 UI가 먼저일 듯
+    
     /// attackTarget을 만들어서 Update_Attack 부분에 attackTarget을 공격하는 부분이 필요
     /// Boss는 몬스터의 공격을 받으면 Update_GetHit 상태로 넘어가서 맞는 부분이 필요할 듯
 }

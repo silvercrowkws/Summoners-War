@@ -18,6 +18,7 @@ public class WindMonster : MonsterBase
         Debug.Log($"룬 방어력 : {runeDB.upDefense}");
         Debug.Log($"기본 방어력 : {monsterDB.baseDefense}");
         Debug.Log($"합산 방어력 : {monsterDB.baseDefense * runeDB.upDefense}");*/
+        Debug.Log($"Wind 합산 체력 : {monsterDB.baseHP * runeDB.upHP}");
     }
 
 

@@ -20,6 +20,7 @@ public class DarkMonster : MonsterBase
         Debug.Log($"룬 방어력 : {runeDB.upDefense}");
         Debug.Log($"기본 방어력 : {monsterDB.baseDefense}");
         Debug.Log($"합산 방어력 : {monsterDB.baseDefense * runeDB.upDefense}");*/
+        Debug.Log($"Dark 합산 체력 : {monsterDB.baseHP * runeDB.upHP}");
     }
 
     /*protected override void OnAttackAble(InputAction.CallbackContext context)

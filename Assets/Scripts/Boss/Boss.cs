@@ -16,6 +16,38 @@ public enum BossState
 public class Boss : MonoBehaviour
 {
     /// <summary>
+    /// 보스의 최대 체력
+    /// </summary>
+    float maxHP = 100;
+
+    /// <summary>
+    /// 보스의 체력
+    /// </summary>
+    float hp;
+    public float HP
+    {
+        get => hp;
+        set
+        {
+            float previousHP = hp;                          // 이전 체력 저장
+
+            //hp = value;
+            hp = Mathf.Clamp(value, 0f, maxHP);             // 보스의 체력은 0 ~ 100 을 넘어가지 않음
+
+            if (hp <= 0f) // 체력이 0 이하일 때
+            {
+                onBossDie?.Invoke();
+                bossState = BossState.Die; // Die 상태로 변경
+            }
+            else if (value < previousHP) // 체력이 감소한 경우
+            {
+                bossState = BossState.GetHit; // GetHit 상태로 변경
+                StartCoroutine(BattleIdleCoroutine()); // 일정 시간 후에 Idle 상태로 변경
+            }
+        }
+    }
+
+    /// <summary>
     /// 보스의 상태(기본은 Idle)
     /// </summary>
     BossState bossState = BossState.Idle;
@@ -89,6 +121,11 @@ public class Boss : MonoBehaviour
     /// 몬스터의 상태별로 행동으로 전환하는 델리게이트
     /// </summary>
     public Action onBossStateUpdate;
+
+    /// <summary>
+    /// 보스가 죽었음을 알리는 델리게이트
+    /// </summary>
+    public Action onBossDie;
 
     /// <summary>
     /// 애니메이터
