@@ -109,9 +109,47 @@ public class MonsterBase : MonoBehaviour
     public float totalAttackSpeed;
 
     /// <summary>
-    /// 이 몬스터의 현재 공격 게이지
+    /// 몬스터의 체력이 변경되었음을 알리는 델리게이트
     /// </summary>
-    //public float attackGauge;
+    public Action<float> onHPChange;
+
+    /// <summary>
+    /// 몬스터들의 기본 체력 * 룬으로 올라가는 체력
+    /// </summary>
+    protected float totalHP;
+
+    /// <summary>
+    /// 각 몬스터의 최대 HP
+    /// </summary>
+    public float maxHP;
+
+    public float TotalHP
+    {
+        get => totalHP;
+        set
+        {
+            /*if (totalHP != value)
+            {
+                totalHP = value;
+
+                // HP 변경시 델리게이트 호출
+
+                for (int i = 0;  i < monsterNames.Count; i++)
+                {
+                    onHPChange?.Invoke(monsterNames[i], totalHP);
+                    Debug.Log(monsterNames[i]);
+                }
+            }*/
+
+            float clampedHP = Mathf.Clamp(value, 0.0f, maxHP); // 최소 0, 최대 maxHP로 클램핑
+            if (totalHP != clampedHP)
+            {
+                totalHP = clampedHP;
+                
+                onHPChange?.Invoke(totalHP);        // HP 변경시 델리게이트 호출
+            }
+        }
+    }
 
     /// <summary>
     /// 공격 가능한지 확인하는 bool 변수
@@ -139,6 +177,9 @@ public class MonsterBase : MonoBehaviour
         totalAttackSpeed = monsterDB.baseAttackSpeed + runeDB.upAttackSpeed;
 
         inputAction = new PlayerInputActions();
+
+        totalHP = monsterDB.baseHP * runeDB.upHP;
+        maxHP = monsterDB.baseHP * runeDB.upHP;
     }
 
     private void OnEnable()

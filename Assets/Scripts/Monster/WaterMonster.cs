@@ -25,7 +25,7 @@ public class WaterMonster : MonsterBase
 
         //Debug.Log($"기본공속 : {monsterDB.baseAttackSpeed}");
         //Debug.Log($"룬 공속 : {runeDB.upAttackSpeed}");
-        Debug.Log($"Water 합산 체력 : {monsterDB.baseHP * runeDB.upHP}");
+        //Debug.Log($"Water 합산 체력 : {monsterDB.baseHP * runeDB.upHP}");
     }
 
     protected override void OnParticleStart()

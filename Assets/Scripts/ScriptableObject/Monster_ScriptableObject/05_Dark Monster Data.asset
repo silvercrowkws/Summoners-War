@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6f1e30767b67bb4c8990c5a2012a253, type: 3}
   m_Name: 05_Dark Monster Data
   m_EditorClassIdentifier: 
-  MonsterName: Dark
+  MonsterName: 05_Dark Monster
   MonsterText: "\uC5B4\uB460\uC18D\uC131 \uBAAC\uC2A4\uD130\uC774\uB2E4"
   element: 0
   monsterType: 1

@@ -34,7 +34,7 @@ public class Boss : MonoBehaviour
             //hp = value;
             hp = Mathf.Clamp(value, 0f, maxHP);             // 보스의 체력은 0 ~ 100 을 넘어가지 않음
 
-            if (hp <= 0f) // 체력이 0 이하일 때
+            if (hp < 1.0f) // 체력이 0 이하일 때
             {
                 onBossDie?.Invoke();
                 bossState = BossState.Die; // Die 상태로 변경

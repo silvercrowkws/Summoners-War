@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class MonsterInfo
@@ -11,7 +12,7 @@ public class MonsterInfo
     public MonsterInfo(float attackSpeed, MonsterBase monster)
     {
         AttackSpeed = attackSpeed;
-        Monster = monster;
+        Monster = monster;        
     }
 }
 
@@ -21,6 +22,11 @@ public class GameManager : Singleton<GameManager>
     /// 공격 게이지가 변경되었음을 알리는 델리게이트
     /// </summary>
     public Action<string ,float> AttackGaugeChange;
+
+    /// <summary>
+    /// 체력이 변경되었음을 알리는 델리게이트
+    /// </summary>
+    public Action<string, float> MonsterHPChange;
 
     TurnManager turnManager;
     //MonsterBase monsterBase;
@@ -76,18 +82,6 @@ public class GameManager : Singleton<GameManager>
 
         turnManager.OnInitialize();
     }
-
-    /*void Sort()
-    {
-        // 공격게이지가 높은 순서부터 앞에 오도록 정렬
-        attackGaugeList.Sort((speed1, speed2) => speed2.CompareTo(speed1));
-        Debug.Log("공격게이지 재정렬");
-
-        for (int i = 0; i < attackGaugeList.Count; i++)
-        {
-            Debug.Log($"{attackGaugeList[i]}");
-        }
-    }*/
 
     void Sort()
     {
