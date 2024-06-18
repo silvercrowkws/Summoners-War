@@ -37,9 +37,13 @@ public class Test_05_GaugeUI : TestBase
     {
         //MonsterBase monsterBase = FindAnyObjectByType<MonsterBase>();
 
-        LightMonster lightMonster = FindAnyObjectByType<LightMonster>();
+        WindMonster windMonster = FindAnyObjectByType<WindMonster>();
+        windMonster.TotalHP += 10;
+        Debug.Log($"{windMonster.TotalHP}");
+
+        /*LightMonster lightMonster = FindAnyObjectByType<LightMonster>();
         lightMonster.TotalHP -= 10;
-        Debug.Log($"{lightMonster.TotalHP}");
+        Debug.Log($"{lightMonster.TotalHP}");*/
     }
 
     protected override void OnTest5(InputAction.CallbackContext context)

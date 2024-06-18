@@ -128,26 +128,41 @@ public class MonsterBase : MonoBehaviour
         get => totalHP;
         set
         {
-            /*if (totalHP != value)
+            float clampedHP = Mathf.Clamp(value, 0.0f, maxHP);      // 최소 0, 최대 maxHP로 클램핑
+            
+            float previousHP = totalHP;                             // 이전 HP 기록
+
+            // clampedHP가 totalHP보다 작은 경우에만 실행
+            if (clampedHP < previousHP)
             {
-                totalHP = value;
+                totalHP = clampedHP;
+                
+                onHPChange?.Invoke(totalHP);                        // HP 감소시 델리게이트 호출
 
-                // HP 변경시 델리게이트 호출
+                // 상태를 GetHit 로 변경하는 부분 필요
+                Debug.Log("HP 감소");
+            }
+            else
+            {
+                totalHP = clampedHP;
+                // HP 증가시 델리게이트 호출
+                onHPChange?.Invoke(totalHP);
+                Debug.Log("HP 증가");
+            }
 
-                for (int i = 0;  i < monsterNames.Count; i++)
-                {
-                    onHPChange?.Invoke(monsterNames[i], totalHP);
-                    Debug.Log(monsterNames[i]);
-                }
-            }*/
+            if(totalHP < 1.0f)
+            {
+                totalHP = 0.0f;
+                Debug.Log("사망 상태");
+                // UI 갱신 하면 안되는 작업 필요
+            }
 
-            float clampedHP = Mathf.Clamp(value, 0.0f, maxHP); // 최소 0, 최대 maxHP로 클램핑
-            if (totalHP != clampedHP)
+            /*if (totalHP != clampedHP)
             {
                 totalHP = clampedHP;
                 
                 onHPChange?.Invoke(totalHP);        // HP 변경시 델리게이트 호출
-            }
+            }*/
         }
     }
 
