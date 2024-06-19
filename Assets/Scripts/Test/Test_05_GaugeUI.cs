@@ -9,9 +9,9 @@ public class Test_05_GaugeUI : TestBase
 
     protected override void OnTest1(InputAction.CallbackContext context)
     {
-        WaterMonster waterMonster = FindAnyObjectByType<WaterMonster>();
-        waterMonster.TotalHP -= 10;
-        Debug.Log($"{waterMonster.TotalHP}");
+        BossMonster bossMonster = FindAnyObjectByType<BossMonster>();
+        bossMonster.TotalHP -= 10;
+        Debug.Log($"{bossMonster.TotalHP}");
     }
 
     protected override void OnTest2(InputAction.CallbackContext context)

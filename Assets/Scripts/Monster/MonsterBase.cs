@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -21,9 +22,9 @@ public class MonsterBase : MonoBehaviour
     MonsterState monsterState = MonsterState.Idle;
 
     /// <summary>
-    /// 보스를 눌러서 공격했는지 확인하는 변수
+    /// target를 눌러서 공격했는지 확인하는 변수
     /// </summary>
-    protected bool onBossClick;
+    protected bool onAttackClick;
 
     public MonsterState MonsterState
     {
@@ -58,6 +59,7 @@ public class MonsterBase : MonoBehaviour
                     case MonsterState.Die:
                         Debug.Log("사망 상태");
                         onMonsterStateChange?.Invoke(monsterState);
+                        onDie?.Invoke(transform.root.name);
                         onMonsterStateUpdate = Update_Die;
                         animator.SetTrigger("Die");
                         break;
@@ -65,6 +67,11 @@ public class MonsterBase : MonoBehaviour
             }
         }
     }
+    
+    /// <summary>
+    /// 이 몬스터가 죽었음을 알리는 델리게이트
+    /// </summary>
+    public Action<string> onDie;
 
     /// <summary>
     /// 몬스터의 상태가 변경되었음을 알리는 델리게이트
@@ -104,6 +111,16 @@ public class MonsterBase : MonoBehaviour
     protected ParticleSystem particle;
 
     /// <summary>
+    /// Attack2일 때 보일 파티클
+    /// </summary>
+    ParticleSystem Attack2Particle;
+
+    /// <summary>
+    /// Attack1일 때 보일 파티클
+    /// </summary>
+    ParticleSystem Attack1Particle;
+
+    /// <summary>
     /// 몬스터들의 기본 공격속도 + 룬으로 올라가는 공격 속도
     /// </summary>
     public float totalAttackSpeed;
@@ -128,23 +145,29 @@ public class MonsterBase : MonoBehaviour
         get => totalHP;
         set
         {
-            float clampedHP = Mathf.Clamp(value, 0.0f, maxHP);      // 최소 0, 최대 maxHP로 클램핑
+            if (monsterState == MonsterState.Die)
+            {
+                // 사망 상태에서는 HP 변동을 막음
+                return;
+            }
+
+            float currentHP = Mathf.Clamp(value, 0.0f, maxHP);      // 최소 0, 최대 maxHP로 클램핑
             
             float previousHP = totalHP;                             // 이전 HP 기록
 
             // clampedHP가 totalHP보다 작은 경우에만 실행
-            if (clampedHP < previousHP)
+            if (currentHP < previousHP)
             {
-                totalHP = clampedHP;
+                totalHP = currentHP;
                 
                 onHPChange?.Invoke(totalHP);                        // HP 감소시 델리게이트 호출
-
-                // 상태를 GetHit 로 변경하는 부분 필요
-                Debug.Log("HP 감소");
+                
+                Debug.Log("HP 감소");                
+                MonsterState = MonsterState.GetHit;                 // GetHit 상태로 변경
             }
             else
             {
-                totalHP = clampedHP;
+                totalHP = currentHP;
                 // HP 증가시 델리게이트 호출
                 onHPChange?.Invoke(totalHP);
                 Debug.Log("HP 증가");
@@ -154,15 +177,8 @@ public class MonsterBase : MonoBehaviour
             {
                 totalHP = 0.0f;
                 Debug.Log("사망 상태");
-                // UI 갱신 하면 안되는 작업 필요
+                MonsterState = MonsterState.Die;                    // GetHit 상태로 변경
             }
-
-            /*if (totalHP != clampedHP)
-            {
-                totalHP = clampedHP;
-                
-                onHPChange?.Invoke(totalHP);        // HP 변경시 델리게이트 호출
-            }*/
         }
     }
 
@@ -195,6 +211,17 @@ public class MonsterBase : MonoBehaviour
 
         totalHP = monsterDB.baseHP * runeDB.upHP;
         maxHP = monsterDB.baseHP * runeDB.upHP;
+
+        if (transform.root.name == "WolfBoss")
+        {
+            Transform particleChild = transform.GetChild(2);                    // 2번째 자식 AttackPosition
+            particleChild = particleChild.transform.GetChild(0);                        // AttackPosition의 0번째 자식 Attack2Particle
+            Attack2Particle = particleChild.GetComponent<ParticleSystem>();
+
+            particleChild = transform.GetChild(2);
+            particleChild = particleChild.transform.GetChild(1);                        // AttackPosition의 1번째 자식 Attack1Particle
+            Attack1Particle = particleChild.GetComponent<ParticleSystem>();
+        }
     }
 
     private void OnEnable()
@@ -246,13 +273,32 @@ public class MonsterBase : MonoBehaviour
     /// </summary>
     protected virtual void Update_Attack()
     {
-        //if (monsterState == MonsterState.Attack && onBossClick && !attackProcessed)
-        if (onBossClick && !attackProcessed)
+        //if (monsterState == MonsterState.Attack && onAttackClick && !attackProcessed)
+        if (onAttackClick && !attackProcessed)
         {
-            animator.SetTrigger("Attack");
-            Debug.Log("공격 애니메이션 실행");
-            attackProcessed = true;  // 여기 변경됨
-            onBossClick = false;
+            if(transform.root.name == "WolfBoss")
+            {
+                int index = UnityEngine.Random.Range(1, 3);     // 1또는 2를 뽑아서
+                switch (index)  // 지금은 50% 확률로 나오는데, 1이 나올 확률을 키우고 2가 나올 확률을 줄여서
+                {               // 1은 데미지 적당하게, 2는 세게 수정할까?
+                    case 1:
+                        animator.SetTrigger("Attack1");
+                        break;
+                    case 2:
+                        animator.SetTrigger("Attack2");
+                        break;
+                }
+                attackProcessed = true;  // 여기 변경됨
+                onAttackClick = false;
+                Debug.Log("보스 공격 애니메이션 실행");
+            }
+            else
+            {
+                animator.SetTrigger("Attack");
+                Debug.Log("공격 애니메이션 실행");
+                attackProcessed = true;  // 여기 변경됨
+                onAttackClick = false;
+            }
 
             // 나중에 여기서 공격 로직 부분 추가 필요
             // attackTarget의 HP를 깎는 부분
@@ -265,7 +311,7 @@ public class MonsterBase : MonoBehaviour
         {
             Debug.Log($"{gameManager.attackGaugeList[0].Monster.name}의 onBossClick = true");
             //Debug.Log("A 를 눌러서 OnAttackAble 활성화");      // 이게 5번이나 실행되는 이유가 뭘까? 횟수도 항상 같은데
-            onBossClick = true;
+            onAttackClick = true;
             OnDisable();            // 움직임 비활성화
         }
         // A키를 연타하면 계속 디버그가 출력됨
@@ -278,7 +324,9 @@ public class MonsterBase : MonoBehaviour
     /// </summary>
     protected virtual void Update_GetHit()
     {
-        
+        // 피격 후 다시 Idle 상태로 돌아감
+        StartCoroutine(GoIdle());
+        //Debug.Log($"{MonsterState}");
     }
 
     /// <summary>
@@ -294,7 +342,22 @@ public class MonsterBase : MonoBehaviour
     /// </summary>
     protected virtual void OnParticleStart()
     {
-        particle.Play();
+        if(transform.root.name == "WolfBoss")
+        {
+            if (animator.GetCurrentAnimatorStateInfo(0).IsName("attack1"))
+            {
+                Attack1Particle.Play();
+            }
+            else if(animator.GetCurrentAnimatorStateInfo(0).IsName("attack2"))
+            {
+                Attack2Particle.Play();
+            }
+        }
+        else
+        {
+            particle.Play();
+        }
+
     }
 
     /// <summary>
@@ -302,7 +365,21 @@ public class MonsterBase : MonoBehaviour
     /// </summary>
     protected virtual void OnParticleStop()
     {
-        particle.Stop();
+        if(transform.root.name == "WolfBoss")
+        {
+            if (animator.GetCurrentAnimatorStateInfo(0).IsName("attack1"))
+            {
+                Attack1Particle.Stop();
+            }
+            else if (animator.GetCurrentAnimatorStateInfo(0).IsName("attack2"))
+            {
+                Attack2Particle.Stop();
+            }
+        }
+        else
+        {
+            particle.Stop();
+        }
         StartCoroutine(IdleCoroutine());
     }
 
@@ -320,10 +397,24 @@ public class MonsterBase : MonoBehaviour
 
         //yield return null;
         //Debug.Log("IdleCoroutine 실행");
-        //onBossClick = false;
+        //onAttackClick = false;
         MonsterState = MonsterState.Idle;
         OnEnable();                             // 다시 움직임 활성화
         turnManager.OnTurnEnd2();
+    }
+
+    /// <summary>
+    /// 피격 후 Idle 상태로 바꾸기 위한 코루틴
+    /// </summary>
+    /// <returns></returns>
+    protected IEnumerator GoIdle()
+    {
+        while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= 1.0f)
+        {
+            yield return null;
+        }
+        //animator.ResetTrigger("Idle");
+        MonsterState = MonsterState.Idle;
     }
 
     /// <summary>
@@ -337,6 +428,7 @@ public class MonsterBase : MonoBehaviour
             yield return null;
             //Debug.Log("AttackCoroutine 실행");
             MonsterState = MonsterState.Attack;
+            animator.ResetTrigger("Idle");
             //attackEnable = false;                   // 공격 후 공격 가능 상태 비활성화
         }
     }

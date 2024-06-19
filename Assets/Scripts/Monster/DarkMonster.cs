@@ -25,13 +25,13 @@ public class DarkMonster : MonsterBase
 
     /*protected override void OnAttackAble(InputAction.CallbackContext context)
     {
-        *//*Debug.Log($"{gameManager.attackGaugeList[0].Monster.name}의 onBossClick = true");
-        onBossClick = true;*//*
+        *//*Debug.Log($"{gameManager.attackGaugeList[0].Monster.name}의 onAttackClick = true");
+        onAttackClick = true;*//*
         if (this.gameObject.name == gameManager.attackGaugeList[0].Monster.name)
         {
-            Debug.Log($"{gameManager.attackGaugeList[0].Monster.name}의 onBossClick = true");
+            Debug.Log($"{gameManager.attackGaugeList[0].Monster.name}의 onAttackClick = true");
             //Debug.Log("A 를 눌러서 OnAttackAble 활성화");      // 이게 5번이나 실행되는 이유가 뭘까? 횟수도 항상 같은데
-            onBossClick = true;
+            onAttackClick = true;
         }
     }*/
 

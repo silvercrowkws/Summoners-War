@@ -24,7 +24,7 @@ public class Test_04_Turn : TestBase
     {
         Debug.Log("3번 클릭");
         /*MonsterBase monsterBase = FindAnyObjectByType<MonsterBase>();
-        monsterBase.onBossClick = true;*/
+        monsterBase.onAttackClick = true;*/
 
         
     }

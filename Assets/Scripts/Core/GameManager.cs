@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class MonsterInfo
@@ -9,10 +10,13 @@ public class MonsterInfo
     public float AttackSpeed { get; set; }
     public MonsterBase Monster { get; set; }
 
-    public MonsterInfo(float attackSpeed, MonsterBase monster)
+    public string MonsterName { get; set; }
+
+    public MonsterInfo(float attackSpeed, MonsterBase monster, string monsterName)
     {
         AttackSpeed = attackSpeed;
-        Monster = monster;        
+        Monster = monster;
+        MonsterName = monsterName;
     }
 }
 
@@ -29,15 +33,16 @@ public class GameManager : Singleton<GameManager>
     public Action<string, float> MonsterHPChange;
 
     TurnManager turnManager;
-    //MonsterBase monsterBase;
-    public MonsterDB[] monsterDB;
-    public RuneDB[] runeDB;
+    MonsterBase monsterBase;
+    //public MonsterDB[] monsterDB;
+    //public RuneDB[] runeDB;
 
     public WaterMonster waterMonster;
     public FireMonster fireMonster;
     public WindMonster windMonster;
     public LightMonster lightMonster;
     public DarkMonster darkMonster;
+    public BossMonster bossMonster;
 
     /// <summary>
     /// 공격게이지를 순서대로 가지고 있을 리스트
@@ -61,11 +66,12 @@ public class GameManager : Singleton<GameManager>
         //Debug.Log($"{monsterDB[3].MonsterName}의 합산 공격 속도 : {lightMonster.totalAttackSpeed}");
         //Debug.Log($"{monsterDB[4].MonsterName}의 합산 공격 속도 : {darkMonster.totalAttackSpeed}");
 
-        attackGaugeList.Add(new MonsterInfo(waterMonster.totalAttackSpeed, waterMonster));
-        attackGaugeList.Add(new MonsterInfo(fireMonster.totalAttackSpeed, fireMonster));
-        attackGaugeList.Add(new MonsterInfo(windMonster.totalAttackSpeed, windMonster));
-        attackGaugeList.Add(new MonsterInfo(lightMonster.totalAttackSpeed, lightMonster));
-        attackGaugeList.Add(new MonsterInfo(darkMonster.totalAttackSpeed, darkMonster));
+        attackGaugeList.Add(new MonsterInfo(waterMonster.totalAttackSpeed, waterMonster, waterMonster.name));
+        attackGaugeList.Add(new MonsterInfo(fireMonster.totalAttackSpeed, fireMonster, fireMonster.name));
+        attackGaugeList.Add(new MonsterInfo(windMonster.totalAttackSpeed, windMonster, windMonster.name));
+        attackGaugeList.Add(new MonsterInfo(lightMonster.totalAttackSpeed, lightMonster, lightMonster.name));
+        attackGaugeList.Add(new MonsterInfo(darkMonster.totalAttackSpeed, darkMonster, darkMonster.name));
+        attackGaugeList.Add(new MonsterInfo(bossMonster.totalAttackSpeed, bossMonster, bossMonster.name));
 
         /*foreach (var monsterInfo in attackGaugeList)
         {
@@ -81,6 +87,32 @@ public class GameManager : Singleton<GameManager>
         };
 
         turnManager.OnInitialize();
+
+        //monsterBase = FindAnyObjectByType<MonsterBase>();       // 이게 문제임 지금
+        waterMonster.onDie += OnDie;
+        fireMonster.onDie += OnDie;
+        windMonster.onDie += OnDie;
+        lightMonster.onDie += OnDie;
+        darkMonster.onDie += OnDie;
+
+    }
+
+    /// <summary>
+    /// 몬스터가 죽었을 때 그 몬스터를 리스트에서 빼는 함수
+    /// </summary>
+    private void OnDie(string monsterName)
+    {
+        // 죽은 몬스터를 리스트에서 빼는 작업 필요
+        MonsterInfo monsterToRemove = attackGaugeList.Find(info => info.MonsterName == monsterName);
+        if (monsterToRemove != null)
+        {
+            attackGaugeList.Remove(monsterToRemove);
+            Debug.Log($"{monsterName} has died. Removing from attack gauge list.");
+        }
+        else
+        {
+            Debug.LogWarning($"Monster {monsterName} not found in attack gauge list.");
+        }
     }
 
     void Sort()
@@ -151,7 +183,7 @@ public class GameManager : Singleton<GameManager>
             /// 그러면서 나머지 몬스터의 공격 가능 변수를 false로 변경하고
             /// 다시 정렬한다
             /// onAttackReady 델리게이트로 MonsterBase 에서 A키와 연결하여
-            /// 본인이 리스트의 맨 앞에 있는 몬스터일 경우 A키로 onBossClick(보스를 공격할 수 있다) 변수를 true로 바꾸어서
+            /// 본인이 리스트의 맨 앞에 있는 몬스터일 경우 A키로 onAttackClick(보스를 공격할 수 있다) 변수를 true로 바꾸어서
             /// Update_Attack에서 애니메이션이 실행되게 하고 있다.
             /// 마지막으로 첫 번째 몬스터의 공격 게이지를 totalAttackSpeed 로 초기화
             /// 

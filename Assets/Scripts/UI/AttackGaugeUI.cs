@@ -48,6 +48,7 @@ public class AttackGaugeUI : MonoBehaviour
             if(slider.value == 1.0f)        // 공격 게이지가 가득 찼으면(= 100이면)
             {
                 turnParticle.Play();        // 파티클 시작
+                Debug.Log("파티클 시작");
             }
             else                            // 공격게이지가 100이 아니면
             {
