@@ -126,6 +126,16 @@ public class MonsterBase : MonoBehaviour
     public float totalAttackSpeed;
 
     /// <summary>
+    /// 몬스터들의 기본 공격력 * 룬으로 올라가는 공격력
+    /// </summary>
+    public float totalAttackPower;
+
+    /// <summary>
+    /// 몬스터들의 기본 방어력 * 룬으로 올라가는 방어력
+    /// </summary>
+    public float totalDefence;
+
+    /// <summary>
     /// 몬스터의 체력이 변경되었음을 알리는 델리게이트
     /// </summary>
     public Action<float> onHPChange;
@@ -139,6 +149,11 @@ public class MonsterBase : MonoBehaviour
     /// 각 몬스터의 최대 HP
     /// </summary>
     public float maxHP;
+
+    /// <summary>
+    /// 이 몬스터의 속성
+    /// </summary>
+    public Element element;
 
     public float TotalHP
     {
@@ -211,6 +226,9 @@ public class MonsterBase : MonoBehaviour
 
         totalHP = monsterDB.baseHP * runeDB.upHP;
         maxHP = monsterDB.baseHP * runeDB.upHP;
+        totalAttackPower = monsterDB.baseAttackPower * runeDB.upAttack;
+        totalDefence = monsterDB.baseDefense * runeDB.upDefense;
+        element = monsterDB.element;
 
         if (transform.root.name == "WolfBoss")
         {
@@ -288,15 +306,15 @@ public class MonsterBase : MonoBehaviour
                         animator.SetTrigger("Attack2");
                         break;
                 }
-                attackProcessed = true;  // 여기 변경됨
-                onAttackClick = false;
                 Debug.Log("보스 공격 애니메이션 실행");
+                attackProcessed = true;
+                onAttackClick = false;
             }
             else
             {
                 animator.SetTrigger("Attack");
                 Debug.Log("공격 애니메이션 실행");
-                attackProcessed = true;  // 여기 변경됨
+                attackProcessed = true;
                 onAttackClick = false;
             }
 
@@ -347,18 +365,27 @@ public class MonsterBase : MonoBehaviour
             if (animator.GetCurrentAnimatorStateInfo(0).IsName("attack1"))
             {
                 Attack1Particle.Play();
+                // 몬스터의 hp를 감소시키는 부분 필요
+                onDamage?.Invoke(totalAttackPower);
+                //Damage();
             }
             else if(animator.GetCurrentAnimatorStateInfo(0).IsName("attack2"))
             {
                 Attack2Particle.Play();
+                // 몬스터의 hp를 감소시키는 부분 필요
+                //Damage();
             }
         }
         else
         {
             particle.Play();
+            // 보스 몬스터의 hp를 감소시키는 부분 필요
+            //Damage();
         }
 
     }
+
+    public Action<float> onDamage;
 
     /// <summary>
     /// 애니메이션 이벤트로 파티클 종료
@@ -443,6 +470,40 @@ public class MonsterBase : MonoBehaviour
             attackEnable = false;                   // 공격 후 공격 가능 상태 비활성화
         }
     }
+
+    /*/// <summary>
+    /// 적에게 데미지를 주는 함수
+    /// </summary>
+    void Damage()
+    {
+        if(transform.root.name == "WolfBoss")
+        {
+            // 상성을 따진 후
+            // 나머지 몬스터 들 중 1마리에게 공격하는 부분 필요
+
+            // 보스 몬스터의 상성을 먼저 공격해야 함
+            // 보스 몬스터가 빛속성일 경우 어둠속성을 먼저 공격
+            
+            switch (monsterDB.element)       // 이 속성에 따라?
+            {
+                case Element.Water:
+                    break;
+                case Element.Fire:
+                    break;
+                case Element.Wind:
+                    break;
+                case Element.Light:
+                    break;
+                case Element.Dark:
+                    break;
+            }
+        }
+        else
+        {
+            // 보스 몬스터에게 공격을 하는 부분 필요
+        }
+
+    }*/
     
     /// attackTarget을 만들어서 Update_Attack 부분에 attackTarget을 공격하는 부분이 필요
     /// Boss는 몬스터의 공격을 받으면 Update_GetHit 상태로 넘어가서 맞는 부분이 필요할 듯

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MonsterName: 04_Light Monster
   MonsterText: "\uBE5B\uC18D\uC131 \uBAAC\uC2A4\uD130\uC774\uB2E4"
-  element: 0
+  element: 4
   monsterType: 0
   baseAttackPower: 15
   baseDefense: 15

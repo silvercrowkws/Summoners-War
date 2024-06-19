@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Xml.Linq;
 using Unity.VisualScripting;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
@@ -94,7 +95,64 @@ public class GameManager : Singleton<GameManager>
         windMonster.onDie += OnDie;
         lightMonster.onDie += OnDie;
         darkMonster.onDie += OnDie;
+        bossMonster.onDie += OnDie;
 
+        waterMonster.onDamage += Damage;
+        fireMonster.onDamage += Damage;
+        windMonster.onDamage += Damage;
+        lightMonster.onDamage += Damage;
+        darkMonster.onDamage += Damage;
+        bossMonster.onDamage += Damage;
+
+    }
+
+    /// <summary>
+    /// 적에게 데미지를 주는 함수
+    /// </summary>
+    /// <param name="damage"></param>
+    private void Damage(float damage)
+    {
+        Debug.Log("Damage 델리게이트 연결");        // 델리게이트 연결도 안됬는데?
+        if (transform.root.name == "WolfBoss")      // 애초에 게임매니저의 root는 WolfBoss 가 아니지 참
+        {
+            // 상성을 따진 후
+            // 나머지 몬스터 들 중 1마리에게 공격하는 부분 필요
+
+            // 보스 몬스터의 상성을 먼저 공격해야 함
+            // 보스 몬스터가 빛속성일 경우 어둠속성을 먼저 공격
+
+            /*switch (monsterBase.element)        // 타겟 몬스터의 속성에 따라 로 변경 필요(지금은 이 몬스터의 속성임)
+            {
+                case Element.Water:
+                    break;
+                case Element.Fire:
+                    break;
+                case Element.Wind:
+                    break;
+                case Element.Light:
+                    break;
+                case Element.Dark:
+                    break;
+            }*/
+            Debug.Log($"WolfBoss 의 공격");
+            if(monsterBase.element == Element.Light)     // 이 몬스터의 속성이 빛이면
+            {
+                Debug.Log($"WolfBoss 는 빛속성이다");
+                if (darkMonster.TotalHP > 1)
+                {
+                    darkMonster.TotalHP -= 10;      // 살이있는지 확인하고 살아있으면 필요
+                    Debug.Log($"darkMonster의 남은 체력 : {darkMonster.TotalHP}");
+                }
+                else
+                {
+                    Debug.Log("다른 몬스터 공격");
+                }
+            }
+        }
+        else
+        {
+            // 보스 몬스터에게 공격을 하는 부분 필요
+        }
     }
 
     /// <summary>
