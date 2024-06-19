@@ -18,5 +18,5 @@ MonoBehaviour:
   monsterType: 2
   baseAttackPower: 10
   baseDefense: 10
-  baseHP: 15
+  baseHP: 75
   baseAttackSpeed: 10

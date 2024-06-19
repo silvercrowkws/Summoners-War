@@ -136,7 +136,7 @@ public class MonsterBase : MonoBehaviour
     public float totalDefence;
 
     /// <summary>
-    /// 몬스터의 체력이 변경되었음을 알리는 델리게이트
+    /// 몬스터의 체력이 변경되었음을 알리는 델리게이트(UI 변경용)
     /// </summary>
     public Action<float> onHPChange;
 
@@ -176,8 +176,9 @@ public class MonsterBase : MonoBehaviour
                 totalHP = currentHP;
                 
                 onHPChange?.Invoke(totalHP);                        // HP 감소시 델리게이트 호출
-                
-                Debug.Log("HP 감소");                
+
+                //Debug.Log("HP 감소");
+                animator.ResetTrigger("Idle");
                 MonsterState = MonsterState.GetHit;                 // GetHit 상태로 변경
             }
             else
@@ -248,14 +249,14 @@ public class MonsterBase : MonoBehaviour
         gameManager.onAttackReady += OnAttackReady;
 
         inputAction.Input.Enable();
-        //inputAction.Input.Attack.canceled += OnAttackAble;          // 이것도 누를때마다 실행되서 변수 계속 바꾸는 문제가 있음
-        inputAction.Input.Attack.performed += OnAttackAble;         // 또는 canceled 대신 performed로 설정
+        inputAction.Input.Attack.canceled += OnAttackAble;          // 이것도 누를때마다 실행되서 변수 계속 바꾸는 문제가 있음
+        //inputAction.Input.Attack.performed += OnAttackAble;         // 또는 canceled 대신 performed로 설정
     }
 
     private void OnDisable()
     {
-        inputAction.Input.Attack.performed -= OnAttackAble;
-        //inputAction.Input.Attack.canceled -= OnAttackAble;
+        //inputAction.Input.Attack.performed -= OnAttackAble;
+        inputAction.Input.Attack.canceled -= OnAttackAble;
         inputAction.Input.Disable();
     }
 
@@ -296,13 +297,16 @@ public class MonsterBase : MonoBehaviour
         {
             if(transform.root.name == "WolfBoss")
             {
+                // 보스 몬스터인 경우
                 int index = UnityEngine.Random.Range(1, 3);     // 1또는 2를 뽑아서
                 switch (index)  // 지금은 50% 확률로 나오는데, 1이 나올 확률을 키우고 2가 나올 확률을 줄여서
                 {               // 1은 데미지 적당하게, 2는 세게 수정할까?
                     case 1:
+                        animator.ResetTrigger("Idle");
                         animator.SetTrigger("Attack1");
                         break;
                     case 2:
+                        animator.ResetTrigger("Idle");
                         animator.SetTrigger("Attack2");
                         break;
                 }
@@ -312,6 +316,8 @@ public class MonsterBase : MonoBehaviour
             }
             else
             {
+                // 보스 몬스터가 아닌 경우
+                animator.ResetTrigger("Idle");
                 animator.SetTrigger("Attack");
                 Debug.Log("공격 애니메이션 실행");
                 attackProcessed = true;
@@ -343,6 +349,8 @@ public class MonsterBase : MonoBehaviour
     protected virtual void Update_GetHit()
     {
         // 피격 후 다시 Idle 상태로 돌아감
+        //animator.ResetTrigger();
+        animator.ResetTrigger("Idle");
         StartCoroutine(GoIdle());
         //Debug.Log($"{MonsterState}");
     }
@@ -366,13 +374,16 @@ public class MonsterBase : MonoBehaviour
             {
                 Attack1Particle.Play();
                 // 몬스터의 hp를 감소시키는 부분 필요
-                onDamage?.Invoke(totalAttackPower);
+                onDamage?.Invoke(transform.root.name, totalAttackPower);
+                
                 //Damage();
             }
             else if(animator.GetCurrentAnimatorStateInfo(0).IsName("attack2"))
             {
                 Attack2Particle.Play();
                 // 몬스터의 hp를 감소시키는 부분 필요
+                onDamage?.Invoke(transform.root.name, totalAttackPower);
+                
                 //Damage();
             }
         }
@@ -380,12 +391,14 @@ public class MonsterBase : MonoBehaviour
         {
             particle.Play();
             // 보스 몬스터의 hp를 감소시키는 부분 필요
+            onDamage?.Invoke(transform.root.name, totalAttackPower);
+            
             //Damage();
         }
 
     }
 
-    public Action<float> onDamage;
+    public Action<string, float> onDamage;
 
     /// <summary>
     /// 애니메이션 이벤트로 파티클 종료
@@ -454,8 +467,8 @@ public class MonsterBase : MonoBehaviour
         {
             yield return null;
             //Debug.Log("AttackCoroutine 실행");
+            //animator.ResetTrigger("Idle");
             MonsterState = MonsterState.Attack;
-            animator.ResetTrigger("Idle");
             //attackEnable = false;                   // 공격 후 공격 가능 상태 비활성화
         }
     }
@@ -470,41 +483,6 @@ public class MonsterBase : MonoBehaviour
             attackEnable = false;                   // 공격 후 공격 가능 상태 비활성화
         }
     }
-
-    /*/// <summary>
-    /// 적에게 데미지를 주는 함수
-    /// </summary>
-    void Damage()
-    {
-        if(transform.root.name == "WolfBoss")
-        {
-            // 상성을 따진 후
-            // 나머지 몬스터 들 중 1마리에게 공격하는 부분 필요
-
-            // 보스 몬스터의 상성을 먼저 공격해야 함
-            // 보스 몬스터가 빛속성일 경우 어둠속성을 먼저 공격
-            
-            switch (monsterDB.element)       // 이 속성에 따라?
-            {
-                case Element.Water:
-                    break;
-                case Element.Fire:
-                    break;
-                case Element.Wind:
-                    break;
-                case Element.Light:
-                    break;
-                case Element.Dark:
-                    break;
-            }
-        }
-        else
-        {
-            // 보스 몬스터에게 공격을 하는 부분 필요
-        }
-
-    }*/
     
-    /// attackTarget을 만들어서 Update_Attack 부분에 attackTarget을 공격하는 부분이 필요
-    /// Boss는 몬스터의 공격을 받으면 Update_GetHit 상태로 넘어가서 맞는 부분이 필요할 듯
+    /// 자기 차례에 맞으면 생기는 문제 때문인거 같은데
 }

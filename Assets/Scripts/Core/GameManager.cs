@@ -110,66 +110,126 @@ public class GameManager : Singleton<GameManager>
     /// 적에게 데미지를 주는 함수
     /// </summary>
     /// <param name="damage"></param>
-    private void Damage(float damage)
+    private void Damage(string monsterName, float damage)
     {
-        Debug.Log("Damage 델리게이트 연결");        // 델리게이트 연결도 안됬는데?
-        if (transform.root.name == "WolfBoss")      // 애초에 게임매니저의 root는 WolfBoss 가 아니지 참
+        //Debug.Log("Damage 델리게이트 연결");
+        if (monsterName == "WolfBoss")                              // 공격한 몬스터의 이름이 WolfBoss면
         {
-            // 상성을 따진 후
-            // 나머지 몬스터 들 중 1마리에게 공격하는 부분 필요
-
-            // 보스 몬스터의 상성을 먼저 공격해야 함
-            // 보스 몬스터가 빛속성일 경우 어둠속성을 먼저 공격
-
-            /*switch (monsterBase.element)        // 타겟 몬스터의 속성에 따라 로 변경 필요(지금은 이 몬스터의 속성임)
+            //Debug.Log($"WolfBoss 의 공격");
+            if(bossMonster.element == Element.Light)                // 이 몬스터의 속성이 빛이면
             {
-                case Element.Water:
-                    break;
-                case Element.Fire:
-                    break;
-                case Element.Wind:
-                    break;
-                case Element.Light:
-                    break;
-                case Element.Dark:
-                    break;
-            }*/
-            Debug.Log($"WolfBoss 의 공격");
-            if(monsterBase.element == Element.Light)     // 이 몬스터의 속성이 빛이면
-            {
-                Debug.Log($"WolfBoss 는 빛속성이다");
-                if (darkMonster.TotalHP > 1)
+                //Debug.Log($"WolfBoss 는 빛속성이다");
+                if (darkMonster.TotalHP > 1)                        // DarkMonster를 공격할 건데 HP가 1이상이면
                 {
-                    darkMonster.TotalHP -= 10;      // 살이있는지 확인하고 살아있으면 필요
-                    Debug.Log($"darkMonster의 남은 체력 : {darkMonster.TotalHP}");
+                    /*// 공격한 몬스터의 공격력 - 맞은 몬스터의 방어력(방어력이 공격력보다 높아도 최소 5의 데미지는 들어가게 함)
+                    float totalDamage = Mathf.Clamp(damage - darkMonster.totalDefence, 5, Mathf.Infinity);
+                    darkMonster.TotalHP -= totalDamage;             // DarkMonster 공격
+                    Debug.Log($"darkMonster의 남은 체력 : {darkMonster.TotalHP}");*/
+                    ApplyDamage(darkMonster, damage);
                 }
                 else
                 {
                     Debug.Log("다른 몬스터 공격");
+                    // 무슨 기준으로 공격하지?
+                    // 현재 hp 비율이 가장 낮은 몬스터?
                 }
             }
         }
         else
         {
-            // 보스 몬스터에게 공격을 하는 부분 필요
+            /*switch (monsterName)
+            {
+                case "05_Dark Monster":
+                    Debug.Log("05_Dark Monster 의 공격");
+                    if (bossMonster.TotalHP > 1)
+                    {
+                        // 공격한 몬스터의 공격력 - 맞은 몬스터의 방어력(방어력이 공격력보다 높아도 최소 5의 데미지는 들어가게 함)
+                        float totalDamage = Mathf.Clamp(damage - bossMonster.totalDefence, 5, Mathf.Infinity);
+                        bossMonster.TotalHP -= totalDamage;             // DarkMonster 공격
+                    }
+                    break;
+                case "04_Light Monster":
+                    if (bossMonster.TotalHP > 1)
+                    {
+                        // 공격한 몬스터의 공격력 - 맞은 몬스터의 방어력(방어력이 공격력보다 높아도 최소 5의 데미지는 들어가게 함)
+                        float totalDamage = Mathf.Clamp(damage - bossMonster.totalDefence, 5, Mathf.Infinity);
+                        bossMonster.TotalHP -= totalDamage;             // DarkMonster 공격
+                    }
+                    break;
+                case "03_Wind Monster":
+                    if (bossMonster.TotalHP > 1)
+                    {
+                        // 공격한 몬스터의 공격력 - 맞은 몬스터의 방어력(방어력이 공격력보다 높아도 최소 5의 데미지는 들어가게 함)
+                        float totalDamage = Mathf.Clamp(damage - bossMonster.totalDefence, 5, Mathf.Infinity);
+                        bossMonster.TotalHP -= totalDamage;             // DarkMonster 공격
+                    }
+                    break;
+                case "02_Fire Monster":
+                    if (bossMonster.TotalHP > 1)
+                    {
+                        // 공격한 몬스터의 공격력 - 맞은 몬스터의 방어력(방어력이 공격력보다 높아도 최소 5의 데미지는 들어가게 함)
+                        float totalDamage = Mathf.Clamp(damage - bossMonster.totalDefence, 5, Mathf.Infinity);
+                        bossMonster.TotalHP -= totalDamage;             // DarkMonster 공격
+                    }
+                    break;
+                case "01_Water Monster":
+                    if (bossMonster.TotalHP > 1)
+                    {
+                        // 공격한 몬스터의 공격력 - 맞은 몬스터의 방어력(방어력이 공격력보다 높아도 최소 5의 데미지는 들어가게 함)
+                        float totalDamage = Mathf.Clamp(damage - bossMonster.totalDefence, 5, Mathf.Infinity);
+                        bossMonster.TotalHP -= totalDamage;             // DarkMonster 공격
+                    }
+                    break;
+            }*/
+
+            MonsterBase targetMonster = null;
+            switch (monsterName)
+            {
+                case "05_Dark Monster":
+                case "04_Light Monster":
+                case "03_Wind Monster":
+                case "02_Fire Monster":
+                case "01_Water Monster":
+                    if (bossMonster.TotalHP > 1)
+                    {
+                        targetMonster = bossMonster;
+                    }
+                    break;
+            }
+            if (targetMonster != null)
+            {
+                ApplyDamage(targetMonster, damage);
+            }
         }
     }
+
+    /// <summary>
+    /// 데미지를 적용하는 함수
+    /// </summary>
+    /// <param name="targetMonster"></param>
+    /// <param name="damage"></param>
+    private void ApplyDamage(MonsterBase targetMonster, float damage)
+    {
+        float totalDamage = Mathf.Clamp(damage - targetMonster.totalDefence, 5, Mathf.Infinity);
+        targetMonster.TotalHP -= totalDamage;
+        Debug.Log($"{targetMonster.name}의 남은 체력 : {targetMonster.TotalHP}");
+    }
+
 
     /// <summary>
     /// 몬스터가 죽었을 때 그 몬스터를 리스트에서 빼는 함수
     /// </summary>
     private void OnDie(string monsterName)
     {
-        // 죽은 몬스터를 리스트에서 빼는 작업 필요
         MonsterInfo monsterToRemove = attackGaugeList.Find(info => info.MonsterName == monsterName);
         if (monsterToRemove != null)
         {
             attackGaugeList.Remove(monsterToRemove);
-            Debug.Log($"{monsterName} has died. Removing from attack gauge list.");
+            Debug.Log($"{monsterName} 가 죽었다");
         }
         else
         {
-            Debug.LogWarning($"Monster {monsterName} not found in attack gauge list.");
+            Debug.LogWarning($"{monsterName} 가 리스트에 없다 ");
         }
     }
 
@@ -285,13 +345,14 @@ public class GameManager : Singleton<GameManager>
         onAttackReady?.Invoke();        // 공격이 가능하다고 알림
 
         // 공격 했다 => 5번 실행
+        float firstMonsterAttackSpeed = attackGaugeList[0].Monster.totalAttackSpeed;
+        attackGaugeList[0].AttackSpeed = firstMonsterAttackSpeed;
+        
         //attackGaugeList[0].AttackSpeed = 1.0f;
 
         // 각자 가지고 있던 합산 공속으로 초기화 => 합산 공속이 빠른 몬스터가 공격 기회를 많이 가져감
         // 가장 높은 몬스터는 60, 가장 작은 몬스터는 20이니까
         // 60이 20보다 공격 기회가 3배 정도 더 가져감 => 수치 조정 좀 필요..
-        float firstMonsterAttackSpeed = attackGaugeList[0].Monster.totalAttackSpeed;
-        attackGaugeList[0].AttackSpeed = firstMonsterAttackSpeed;
         //AttackGaugeChange?.Invoke(attackGaugeList[0].AttackSpeed);      // 첫 번째 몬스터의 공격 게이지가 초기화되었음을 알림
         //Debug.Log($"초기화 전 0번 몬스터의 공속 : {attackGaugeList[0].Monster.totalAttackSpeed}");
 
