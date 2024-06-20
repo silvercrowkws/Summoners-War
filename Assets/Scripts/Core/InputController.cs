@@ -26,7 +26,7 @@ public class InputController : MonoBehaviour
     private void OnEnable()
     {
         inputAction.Input.Enable();
-        inputAction.Input.Attack.canceled += OnAttackAble;          // 이것도 누를때마다 실행되서 변수 계속 바꾸는 문제가 있음
+        inputAction.Input.Attack.canceled += OnAttackAble;
     }
 
     private void OnDisable()
@@ -38,6 +38,16 @@ public class InputController : MonoBehaviour
     private void OnAttackAble(InputAction.CallbackContext context)
     {
         Debug.Log("InputController의 A키 입력 확인");
-        // 여기에 턴을 얻은 애한테 연결하는 부분?
+        
+    }
+
+    void OnConnect()
+    {
+        this.gameObject.SetActive(false);
+    }
+
+    IEnumerator DisConnect()
+    {
+        yield return null;
     }
 }

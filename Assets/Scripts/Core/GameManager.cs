@@ -46,7 +46,7 @@ public class GameManager : Singleton<GameManager>
     public DarkMonster darkMonster;
     public BossMonster bossMonster;
 
-    InputController inputController;
+    //InputController inputController;
 
     /// <summary>
     /// 공격게이지를 순서대로 가지고 있을 리스트
@@ -62,7 +62,7 @@ public class GameManager : Singleton<GameManager>
     {
         //monsterBase = FindAnyObjectByType<MonsterBase>();
         turnManager = FindAnyObjectByType<TurnManager>();
-        inputController = FindAnyObjectByType<InputController>();
+        //inputController = FindAnyObjectByType<InputController>();
 
         /// 합산 공격속도는 게임 시작시 세팅되는 것이라 프리팹에 있는 것을 인스펙터에 넣으면 안됨(그럼 0으로 나옴)
         //Debug.Log($"{monsterDB[0].MonsterName}의 합산 공격 속도 : {waterMonster.totalAttackSpeed}");
@@ -172,17 +172,21 @@ public class GameManager : Singleton<GameManager>
         }
         else
         {
-            // 보스 몬스터가 아닌 경우
+            // 다른 몬스터가 공격하는 경우
             MonsterBase targetMonster = null;
             switch (monsterName)
             {
+                case "05_Dark Monster":
+                    /*if (bossMonster.TotalHP > 1)
+                    {
+                        targetMonster = bossMonster;
+                        damage *= 1.5f;
+                    }
+                    break;*/
                 case "01_Water Monster":
-                    damage *= 1.5f;
-                    break;
                 case "02_Fire Monster":
                 case "03_Wind Monster":
                 case "04_Light Monster":
-                case "05_Dark Monster":
                     if (bossMonster.TotalHP > 1)
                     {
                         targetMonster = bossMonster;
@@ -319,6 +323,8 @@ public class GameManager : Singleton<GameManager>
             AttackGaugeChange?.Invoke(attackGaugeList[0].Monster.name, attackGaugeList[0].AttackSpeed);      // 첫 번째 몬스터의 공격 게이지가 100으로 변경되었음을 알림
 
             attackGaugeList[0].Monster.attackEnable = true;     // 이 부분에 inputmanager 연결하는 부분 필요
+
+
             //Debug.Log($"리스트 0번 {attackGaugeList[0].Monster.name}의 공격 가능 여부 : {attackGaugeList[0].Monster.attackEnable}");
             //Debug.Log($"현재 턴을 가진{attackGaugeList[0].Monster.name}의 공격 게이지 : {attackGaugeList[0].AttackSpeed} 으로 조정");
 

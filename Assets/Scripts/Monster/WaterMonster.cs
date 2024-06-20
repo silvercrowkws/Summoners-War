@@ -32,15 +32,12 @@ public class WaterMonster : MonsterBase
     {
         attackPosition.gameObject.SetActive(true);
         base.OnParticleStart();
-        //particle.Play();
     }
 
     protected override void OnParticleStop()
     {
         attackPosition.gameObject.SetActive(false);
         base.OnParticleStop();
-        //particle.Stop();
-        //StartCoroutine(IdleCoroutine());
     }
 
 

@@ -208,7 +208,7 @@ public class MonsterBase : MonoBehaviour
     /// <summary>
     /// 플레이어 인풋 액션
     /// </summary>
-    //public PlayerInputActions inputAction;
+    PlayerInputActions inputAction;
 
     /// <summary>
     /// 턴 매니저
@@ -225,7 +225,7 @@ public class MonsterBase : MonoBehaviour
 
         totalAttackSpeed = monsterDB.baseAttackSpeed + runeDB.upAttackSpeed;
 
-        //inputAction = new PlayerInputActions();
+        inputAction = new PlayerInputActions();
 
         totalHP = monsterDB.baseHP * runeDB.upHP;
         maxHP = monsterDB.baseHP * runeDB.upHP;
@@ -250,16 +250,16 @@ public class MonsterBase : MonoBehaviour
         gameManager = GameManager.Instance;
         gameManager.onAttackReady += OnAttackReady;
 
-        //inputAction.Input.Enable();
-        //inputAction.Input.Attack.canceled += OnAttackAble;          // 이것도 누를때마다 실행되서 변수 계속 바꾸는 문제가 있음
+        inputAction.Input.Enable();
+        inputAction.Input.Attack.canceled += OnAttackAble;          // 이것도 누를때마다 실행되서 변수 계속 바꾸는 문제가 있음
         //inputAction.Input.Attack.performed += OnAttackAble;         // 또는 canceled 대신 performed로 설정
     }
 
     private void OnDisable()
     {
         //inputAction.Input.Attack.performed -= OnAttackAble;
-        //inputAction.Input.Attack.canceled -= OnAttackAble;
-        //inputAction.Input.Disable();
+        inputAction.Input.Attack.canceled -= OnAttackAble;
+        inputAction.Input.Disable();
     }
 
     protected virtual void Start()
@@ -339,7 +339,6 @@ public class MonsterBase : MonoBehaviour
         if (this.gameObject.name == gameManager.attackGaugeList[0].Monster.name)        // 본인이 리스트의 맨 앞에 있는 몬스터이면
         {
             Debug.Log($"{gameManager.attackGaugeList[0].Monster.name}의 onBossClick = true");
-            //Debug.Log("A 를 눌러서 OnAttackAble 활성화");      // 이게 5번이나 실행되는 이유가 뭘까? 횟수도 항상 같은데
             onAttackClick = true;
             OnDisable();            // 움직임 비활성화
         }
@@ -445,6 +444,8 @@ public class MonsterBase : MonoBehaviour
         MonsterState = MonsterState.Idle;
         Debug.Log($"{MonsterState}");
         OnEnable();                             // 다시 움직임 활성화
+
+        yield return null;
         turnManager.OnTurnEnd2();
     }
 
@@ -458,6 +459,8 @@ public class MonsterBase : MonoBehaviour
         {
             yield return null;
         }
+        
+        yield return null;
         //animator.ResetTrigger("Idle");
         MonsterState = MonsterState.Idle;
     }
@@ -473,6 +476,7 @@ public class MonsterBase : MonoBehaviour
             yield return null;
             //Debug.Log("AttackCoroutine 실행");
             //animator.ResetTrigger("Idle");
+            ResetAllTrigget();
             MonsterState = MonsterState.Attack;
             //attackEnable = false;                   // 공격 후 공격 가능 상태 비활성화
         }
