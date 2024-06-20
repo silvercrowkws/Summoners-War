@@ -75994,7 +75994,7 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 2
+  - time: 2.1666667
     functionName: OnParticleStop
     data: 
     objectReferenceParameter: {fileID: 0}
