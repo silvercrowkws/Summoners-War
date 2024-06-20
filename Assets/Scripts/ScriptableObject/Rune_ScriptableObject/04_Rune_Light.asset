@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   RuneText: "\uACF5\uACA9\uB8EC"
   runeNumber: 4
-  upAttack: 5
+  upAttack: 3
   upDefense: 2
   upHP: 2
   upAttackSpeed: 40

@@ -17,6 +17,6 @@ MonoBehaviour:
   element: 4
   monsterType: 0
   baseAttackPower: 30
-  baseDefense: 30
-  baseHP: 30
+  baseDefense: 15
+  baseHP: 100
   baseAttackSpeed: 15

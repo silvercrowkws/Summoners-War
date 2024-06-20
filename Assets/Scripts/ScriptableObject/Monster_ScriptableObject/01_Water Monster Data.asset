@@ -16,7 +16,7 @@ MonoBehaviour:
   MonsterText: "\uBB3C\uC18D\uC131 \uBAAC\uC2A4\uD130\uC774\uB2E4"
   element: 1
   monsterType: 0
-  baseAttackPower: 15
+  baseAttackPower: 30
   baseDefense: 10
   baseHP: 50
   baseAttackSpeed: 10

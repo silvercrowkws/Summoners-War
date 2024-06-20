@@ -40,7 +40,8 @@ public class MonsterBase : MonoBehaviour
                         Debug.Log("대기 상태");
                         onMonsterStateChange?.Invoke(monsterState);
                         onMonsterStateUpdate = Update_Idle;
-                        animator.SetTrigger("Idle");
+                        //animator.ResetTrigger("Idle");        // 이거 지우고 다른 부분에 추가해야 할듯
+                        animator.SetTrigger("Idle");        // 이거 지우고 다른 부분에 추가해야 할듯
                         //attackProcessed = false;  // 여기서 attackProcessed를 초기화 // 여기 변경됨
                         break;
                     case MonsterState.Attack:
@@ -178,7 +179,8 @@ public class MonsterBase : MonoBehaviour
                 onHPChange?.Invoke(totalHP);                        // HP 감소시 델리게이트 호출
 
                 //Debug.Log("HP 감소");
-                animator.ResetTrigger("Idle");
+                //animator.ResetTrigger("Idle");
+                ResetAllTrigget();
                 MonsterState = MonsterState.GetHit;                 // GetHit 상태로 변경
             }
             else
@@ -302,11 +304,13 @@ public class MonsterBase : MonoBehaviour
                 switch (index)  // 지금은 50% 확률로 나오는데, 1이 나올 확률을 키우고 2가 나올 확률을 줄여서
                 {               // 1은 데미지 적당하게, 2는 세게 수정할까?
                     case 1:
-                        animator.ResetTrigger("Idle");
+                        //animator.ResetTrigger("Idle");
+                        ResetAllTrigget();
                         animator.SetTrigger("Attack1");
                         break;
                     case 2:
-                        animator.ResetTrigger("Idle");
+                        //animator.ResetTrigger("Idle");
+                        ResetAllTrigget();
                         animator.SetTrigger("Attack2");
                         break;
                 }
@@ -317,7 +321,8 @@ public class MonsterBase : MonoBehaviour
             else
             {
                 // 보스 몬스터가 아닌 경우
-                animator.ResetTrigger("Idle");
+                //animator.ResetTrigger("Idle");
+                ResetAllTrigget();
                 animator.SetTrigger("Attack");
                 Debug.Log("공격 애니메이션 실행");
                 attackProcessed = true;
@@ -350,7 +355,8 @@ public class MonsterBase : MonoBehaviour
     {
         // 피격 후 다시 Idle 상태로 돌아감
         //animator.ResetTrigger();
-        animator.ResetTrigger("Idle");
+        //animator.ResetTrigger("Idle");
+        //ResetAllTrigget();
         StartCoroutine(GoIdle());
         //Debug.Log($"{MonsterState}");
     }
@@ -370,7 +376,7 @@ public class MonsterBase : MonoBehaviour
     {
         if(transform.root.name == "WolfBoss")
         {
-            if (animator.GetCurrentAnimatorStateInfo(0).IsName("attack1"))
+            if (animator.GetCurrentAnimatorStateInfo(0).IsName("attack1"))          // 지금 실행되고 있는 애니메이션이 attack1이면
             {
                 Attack1Particle.Play();
                 // 몬스터의 hp를 감소시키는 부분 필요
@@ -378,7 +384,7 @@ public class MonsterBase : MonoBehaviour
                 
                 //Damage();
             }
-            else if(animator.GetCurrentAnimatorStateInfo(0).IsName("attack2"))
+            else if(animator.GetCurrentAnimatorStateInfo(0).IsName("attack2"))      // 지금 실행되고 있는 애니메이션이 attack2이면
             {
                 Attack2Particle.Play();
                 // 몬스터의 hp를 감소시키는 부분 필요
@@ -430,7 +436,7 @@ public class MonsterBase : MonoBehaviour
     protected IEnumerator IdleCoroutine()
     {
         // 애니메이션 완료할 때까지 기다림
-        while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= 1.0f)
+        while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= 1.0f)      // 애니메이션이 진행 중이면true, 애니메이션이 완료되면 fasle
         {
             yield return null;
         }
@@ -483,6 +489,27 @@ public class MonsterBase : MonoBehaviour
             attackEnable = false;                   // 공격 후 공격 가능 상태 비활성화
         }
     }
-    
+
+
+    /// <summary>
+    /// 모든 애니메이터 트리거를 초기화하는 함수
+    /// </summary>
+    void ResetAllTrigget()
+    {
+        animator.ResetTrigger("Idle");
+
+        if(transform.root.name == "WolfBoss")
+        {
+            animator.ResetTrigger("Attack1");
+            animator.ResetTrigger("Attack2");
+        }
+        else
+        {
+            animator.ResetTrigger("Attack");
+        }
+        animator.ResetTrigger("GetHit");
+        animator.ResetTrigger("Die");
+    }
+
     /// 자기 차례에 맞으면 생기는 문제 때문인거 같은데
 }
