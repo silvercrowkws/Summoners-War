@@ -208,7 +208,7 @@ public class MonsterBase : MonoBehaviour
     /// <summary>
     /// 플레이어 인풋 액션
     /// </summary>
-    public PlayerInputActions inputAction;
+    //public PlayerInputActions inputAction;
 
     /// <summary>
     /// 턴 매니저
@@ -225,7 +225,7 @@ public class MonsterBase : MonoBehaviour
 
         totalAttackSpeed = monsterDB.baseAttackSpeed + runeDB.upAttackSpeed;
 
-        inputAction = new PlayerInputActions();
+        //inputAction = new PlayerInputActions();
 
         totalHP = monsterDB.baseHP * runeDB.upHP;
         maxHP = monsterDB.baseHP * runeDB.upHP;
@@ -250,16 +250,16 @@ public class MonsterBase : MonoBehaviour
         gameManager = GameManager.Instance;
         gameManager.onAttackReady += OnAttackReady;
 
-        inputAction.Input.Enable();
-        inputAction.Input.Attack.canceled += OnAttackAble;          // 이것도 누를때마다 실행되서 변수 계속 바꾸는 문제가 있음
+        //inputAction.Input.Enable();
+        //inputAction.Input.Attack.canceled += OnAttackAble;          // 이것도 누를때마다 실행되서 변수 계속 바꾸는 문제가 있음
         //inputAction.Input.Attack.performed += OnAttackAble;         // 또는 canceled 대신 performed로 설정
     }
 
     private void OnDisable()
     {
         //inputAction.Input.Attack.performed -= OnAttackAble;
-        inputAction.Input.Attack.canceled -= OnAttackAble;
-        inputAction.Input.Disable();
+        //inputAction.Input.Attack.canceled -= OnAttackAble;
+        //inputAction.Input.Disable();
     }
 
     protected virtual void Start()
@@ -343,8 +343,6 @@ public class MonsterBase : MonoBehaviour
             onAttackClick = true;
             OnDisable();            // 움직임 비활성화
         }
-        // A키를 연타하면 계속 디버그가 출력됨
-        // 처음에 한번만 눌러서 작동하게 OnDisable을 해버려야?
     }
 
 
@@ -436,7 +434,7 @@ public class MonsterBase : MonoBehaviour
     protected IEnumerator IdleCoroutine()
     {
         // 애니메이션 완료할 때까지 기다림
-        while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= 1.0f)      // 애니메이션이 진행 중이면true, 애니메이션이 완료되면 fasle
+        while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f)      // 애니메이션이 진행 중이면true, 애니메이션이 완료되면 fasle
         {
             yield return null;
         }
@@ -445,6 +443,7 @@ public class MonsterBase : MonoBehaviour
         //Debug.Log("IdleCoroutine 실행");
         //onAttackClick = false;
         MonsterState = MonsterState.Idle;
+        Debug.Log($"{MonsterState}");
         OnEnable();                             // 다시 움직임 활성화
         turnManager.OnTurnEnd2();
     }

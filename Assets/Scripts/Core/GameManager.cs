@@ -5,6 +5,7 @@ using System.Xml.Linq;
 using Unity.VisualScripting;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.InputSystem.XInput;
 
 public class MonsterInfo
 {
@@ -45,6 +46,8 @@ public class GameManager : Singleton<GameManager>
     public DarkMonster darkMonster;
     public BossMonster bossMonster;
 
+    InputController inputController;
+
     /// <summary>
     /// 공격게이지를 순서대로 가지고 있을 리스트
     /// </summary>
@@ -59,6 +62,7 @@ public class GameManager : Singleton<GameManager>
     {
         //monsterBase = FindAnyObjectByType<MonsterBase>();
         turnManager = FindAnyObjectByType<TurnManager>();
+        inputController = FindAnyObjectByType<InputController>();
 
         /// 합산 공격속도는 게임 시작시 세팅되는 것이라 프리팹에 있는 것을 인스펙터에 넣으면 안됨(그럼 0으로 나옴)
         //Debug.Log($"{monsterDB[0].MonsterName}의 합산 공격 속도 : {waterMonster.totalAttackSpeed}");
@@ -314,7 +318,7 @@ public class GameManager : Singleton<GameManager>
             attackGaugeList[0].AttackSpeed = 100.0f;            // 공격 게이지와 공격 스피드가 좀 혼용되서 사용되고 있음
             AttackGaugeChange?.Invoke(attackGaugeList[0].Monster.name, attackGaugeList[0].AttackSpeed);      // 첫 번째 몬스터의 공격 게이지가 100으로 변경되었음을 알림
 
-            attackGaugeList[0].Monster.attackEnable = true;
+            attackGaugeList[0].Monster.attackEnable = true;     // 이 부분에 inputmanager 연결하는 부분 필요
             //Debug.Log($"리스트 0번 {attackGaugeList[0].Monster.name}의 공격 가능 여부 : {attackGaugeList[0].Monster.attackEnable}");
             //Debug.Log($"현재 턴을 가진{attackGaugeList[0].Monster.name}의 공격 게이지 : {attackGaugeList[0].AttackSpeed} 으로 조정");
 
