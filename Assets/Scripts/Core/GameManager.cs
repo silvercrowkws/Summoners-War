@@ -46,11 +46,13 @@ public class GameManager : Singleton<GameManager>
     public DarkMonster darkMonster;
     public BossMonster bossMonster;
 
-    //InputController inputController;
+
+    ClickMonsterButton clickMonsterButton;
 
     /// <summary>
     /// 공격게이지를 순서대로 가지고 있을 리스트
     /// </summary>
+    [SerializeField]
     public List<MonsterInfo> attackGaugeList = new List<MonsterInfo>();
 
     private void Awake()
@@ -71,29 +73,34 @@ public class GameManager : Singleton<GameManager>
         //Debug.Log($"{monsterDB[3].MonsterName}의 합산 공격 속도 : {lightMonster.totalAttackSpeed}");
         //Debug.Log($"{monsterDB[4].MonsterName}의 합산 공격 속도 : {darkMonster.totalAttackSpeed}");
 
-        attackGaugeList.Add(new MonsterInfo(waterMonster.totalAttackSpeed, waterMonster, waterMonster.name));
+        clickMonsterButton = FindAnyObjectByType<ClickMonsterButton>();     // FindAnyObjectByType? 가 맞나
+        clickMonsterButton.onPickMonster += OnAddAttackGaugeList;
+
+        /*attackGaugeList.Add(new MonsterInfo(waterMonster.totalAttackSpeed, waterMonster, waterMonster.name));
         attackGaugeList.Add(new MonsterInfo(fireMonster.totalAttackSpeed, fireMonster, fireMonster.name));
         attackGaugeList.Add(new MonsterInfo(windMonster.totalAttackSpeed, windMonster, windMonster.name));
         attackGaugeList.Add(new MonsterInfo(lightMonster.totalAttackSpeed, lightMonster, lightMonster.name));
         attackGaugeList.Add(new MonsterInfo(darkMonster.totalAttackSpeed, darkMonster, darkMonster.name));
-        attackGaugeList.Add(new MonsterInfo(bossMonster.totalAttackSpeed, bossMonster, bossMonster.name));
+        attackGaugeList.Add(new MonsterInfo(bossMonster.totalAttackSpeed, bossMonster, bossMonster.name));*/
 
         /*foreach (var monsterInfo in attackGaugeList)
         {
             Debug.Log($"{monsterInfo.Monster.name}의 합산 공격 속도 : {monsterInfo.AttackSpeed}");
         }*/
 
-        Sort();
+        //Sort();
 
-        turnManager.onTurnStart += (_) =>
+        StartGameButton startGameButton = FindAnyObjectByType<StartGameButton>();
+        startGameButton.onGameStart += AAA;
+
+        /*turnManager.onTurnStart += (_) =>       // 이건 나중에 선택 완료 버튼 누르면 전투씬으로 넘어가고 나서 실행되어야 할듯
         {
             //Debug.Log("onTurnStart 델리게이트 받음");
             OnAttackGaugeUpdate();      // 턴이 시작되었다는 델리게이트를 받아서 공격게이지들을 조정
         };
 
-        turnManager.OnInitialize();
-
-        //monsterBase = FindAnyObjectByType<MonsterBase>();       // 이게 문제임 지금
+        turnManager.OnInitialize();*/
+        
         waterMonster.onDie += OnDie;
         fireMonster.onDie += OnDie;
         windMonster.onDie += OnDie;
@@ -108,6 +115,44 @@ public class GameManager : Singleton<GameManager>
         darkMonster.onDamage += Damage;
         bossMonster.onDamage += Damage;
 
+    }
+
+    private void AAA()
+    {
+        turnManager.onTurnStart += (_) =>       // 이건 나중에 선택 완료 버튼 누르면 전투씬으로 넘어가고 나서 실행되어야 할듯
+        {
+            //Debug.Log("onTurnStart 델리게이트 받음");
+            OnAttackGaugeUpdate();      // 턴이 시작되었다는 델리게이트를 받아서 공격게이지들을 조정
+        };
+
+        turnManager.OnInitialize();
+    }
+
+    /// <summary>
+    /// 선택한 몬스터를 AttackGaugeList에 추가하는 함수
+    /// </summary>
+    /// <param name="name"></param>
+    private void OnAddAttackGaugeList(string name)
+    {
+        switch (name)
+        {
+            case "01_Water Monster":
+                attackGaugeList.Add(new MonsterInfo(waterMonster.totalAttackSpeed, waterMonster, waterMonster.name));
+                break;
+            case "02_Fire Monster":
+                attackGaugeList.Add(new MonsterInfo(fireMonster.totalAttackSpeed, fireMonster, fireMonster.name));
+                break;
+            case "03_Wind Monster":
+                attackGaugeList.Add(new MonsterInfo(windMonster.totalAttackSpeed, windMonster, windMonster.name));
+                break;
+            case "04_Light Monster":
+                attackGaugeList.Add(new MonsterInfo(lightMonster.totalAttackSpeed, lightMonster, lightMonster.name));
+                break;
+            case "05_Dark Monster":
+                attackGaugeList.Add(new MonsterInfo(darkMonster.totalAttackSpeed, darkMonster, darkMonster.name));
+                break;
+        }
+        Sort();
     }
 
     /// <summary>
