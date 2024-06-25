@@ -47,12 +47,11 @@ public class GameManager : Singleton<GameManager>
     public BossMonster bossMonster;
 
 
-    ClickMonsterButton clickMonsterButton;
+    MonsterClickButton clickMonsterButton;
 
     /// <summary>
     /// 공격게이지를 순서대로 가지고 있을 리스트
     /// </summary>
-    [SerializeField]
     public List<MonsterInfo> attackGaugeList = new List<MonsterInfo>();
 
     private void Awake()
@@ -73,7 +72,7 @@ public class GameManager : Singleton<GameManager>
         //Debug.Log($"{monsterDB[3].MonsterName}의 합산 공격 속도 : {lightMonster.totalAttackSpeed}");
         //Debug.Log($"{monsterDB[4].MonsterName}의 합산 공격 속도 : {darkMonster.totalAttackSpeed}");
 
-        clickMonsterButton = FindAnyObjectByType<ClickMonsterButton>();     // FindAnyObjectByType? 가 맞나
+        clickMonsterButton = FindAnyObjectByType<MonsterClickButton>();     // FindAnyObjectByType? 가 맞나
         clickMonsterButton.onPickMonster += OnAddAttackGaugeList;
 
         /*attackGaugeList.Add(new MonsterInfo(waterMonster.totalAttackSpeed, waterMonster, waterMonster.name));
@@ -91,7 +90,7 @@ public class GameManager : Singleton<GameManager>
         //Sort();
 
         StartGameButton startGameButton = FindAnyObjectByType<StartGameButton>();
-        startGameButton.onGameStart += AAA;
+        startGameButton.onGameStart += OnGameStart;
 
         /*turnManager.onTurnStart += (_) =>       // 이건 나중에 선택 완료 버튼 누르면 전투씬으로 넘어가고 나서 실행되어야 할듯
         {
@@ -117,7 +116,7 @@ public class GameManager : Singleton<GameManager>
 
     }
 
-    private void AAA()
+    private void OnGameStart()
     {
         turnManager.onTurnStart += (_) =>       // 이건 나중에 선택 완료 버튼 누르면 전투씬으로 넘어가고 나서 실행되어야 할듯
         {
@@ -138,18 +137,27 @@ public class GameManager : Singleton<GameManager>
         {
             case "01_Water Monster":
                 attackGaugeList.Add(new MonsterInfo(waterMonster.totalAttackSpeed, waterMonster, waterMonster.name));
+                Debug.Log($"{waterMonster.name} 리스트에 추가");
                 break;
             case "02_Fire Monster":
                 attackGaugeList.Add(new MonsterInfo(fireMonster.totalAttackSpeed, fireMonster, fireMonster.name));
+                Debug.Log($"{fireMonster.name} 리스트에 추가");
                 break;
             case "03_Wind Monster":
                 attackGaugeList.Add(new MonsterInfo(windMonster.totalAttackSpeed, windMonster, windMonster.name));
+                Debug.Log($"{windMonster.name} 리스트에 추가");
                 break;
             case "04_Light Monster":
                 attackGaugeList.Add(new MonsterInfo(lightMonster.totalAttackSpeed, lightMonster, lightMonster.name));
+                Debug.Log($"{lightMonster.name} 리스트에 추가");
                 break;
             case "05_Dark Monster":
                 attackGaugeList.Add(new MonsterInfo(darkMonster.totalAttackSpeed, darkMonster, darkMonster.name));
+                Debug.Log($"{darkMonster.name} 리스트에 추가");
+                break;
+            case "WolfBoss":
+                attackGaugeList.Add(new MonsterInfo(bossMonster.totalAttackSpeed, bossMonster, bossMonster.name));
+                Debug.Log($"{bossMonster.name} 리스트에 추가");
                 break;
         }
         Sort();
