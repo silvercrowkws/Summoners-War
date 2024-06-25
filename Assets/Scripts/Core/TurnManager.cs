@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using static UnityEngine.EventSystems.EventTrigger;
 
-public class TurnManager : MonoBehaviour
+public class TurnManager : Singleton<TurnManager>
 {
     /// <summary>
     /// 현재 턴 진행상황 표시용 enum
@@ -56,7 +56,7 @@ public class TurnManager : MonoBehaviour
     /// <summary>
     /// 씬이 시작될 때 초기화
     /// </summary>
-    public void OnInitialize()
+    public void OnInitialize2()
     {
         turnNumber = 0;                         // OnTurnStart에서 turnNumber를 증가 시키기 때문에 0에서 시작
 
@@ -66,7 +66,7 @@ public class TurnManager : MonoBehaviour
         //onTurnStart = null;                     // 델리게이트 초기화        
         //onTurnEnd = null;
 
-        //Debug.Log("OnInitialize 호출");
+        //Debug.Log("OnInitialize2 호출");
         OnTurnStart();                          // 턴 시작
         // OnTurnStart를 바로 걸지 말고 처음에 뭔가 하고 나서 타이밍 걸어서 시작되게 해야할듯
     }

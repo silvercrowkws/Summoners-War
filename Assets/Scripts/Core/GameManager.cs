@@ -119,7 +119,7 @@ public class GameManager : Singleton<GameManager>
             OnAttackGaugeUpdate();      // 턴이 시작되었다는 델리게이트를 받아서 공격게이지들을 조정
         };
 
-        turnManager.OnInitialize();*/
+        turnManager.OnInitialize2();*/
         
         waterMonster.onDie += OnDie;
         fireMonster.onDie += OnDie;
@@ -172,7 +172,7 @@ public class GameManager : Singleton<GameManager>
                 OnAttackGaugeUpdate();      // 턴이 시작되었다는 델리게이트를 받아서 공격게이지들을 조정
             };
 
-            turnManager.OnInitialize();
+            turnManager.OnInitialize2();
         }
     }
 
@@ -358,7 +358,7 @@ public class GameManager : Singleton<GameManager>
 
     protected override void OnInitialize()
     {
-        //turnManager.OnInitialize();
+        //turnManager.OnInitialize2();
     }
 
     /// <summary>
@@ -416,7 +416,7 @@ public class GameManager : Singleton<GameManager>
             /// 이 함수는 OnAttackGaugeUpdate 에서 실행되는데
             /// OnAttackGaugeUpdate 함수는 턴 매니저의 onTurnStart 델리게이트의 신호를 받아서 실행되고 있고
             /// onTurnStart는 턴 매니저의 OnInitialize에서 실행하고
-            /// 턴 매니저의 OnInitialize 함수는 게임 매니저의 Start에서 실행하여
+            /// 턴 매니저의 OnInitialize2 함수는 게임 매니저의 Start에서 실행하여
             /// 게임이 시작되자 마자 1턴을 얻어
             /// 리스트의 0 번째 몬스터는 바로 공격 할 수 있는 기회를 가진다
 
