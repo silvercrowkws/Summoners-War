@@ -1,11 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Xml.Linq;
-using Unity.VisualScripting;
-using UnityEditor.Experimental.GraphView;
+using UnityEditor.SearchService;
 using UnityEngine;
-using UnityEngine.InputSystem.XInput;
+using UnityEngine.SceneManagement;
+
 
 public class MonsterInfo
 {
@@ -24,6 +23,22 @@ public class MonsterInfo
 
 public class GameManager : Singleton<GameManager>
 {
+    /// <summary>
+    /// 게임 상태 표시용 enum
+    /// </summary>
+    enum GameState
+    {
+        None = 0,
+        PickMonster,
+        Play,
+        End
+    }
+
+    /// <summary>
+    /// 현재 게임 상태
+    /// </summary>
+    GameState gameState = GameState.None;
+
     /// <summary>
     /// 공격 게이지가 변경되었음을 알리는 델리게이트
     /// </summary>
@@ -47,7 +62,8 @@ public class GameManager : Singleton<GameManager>
     public BossMonster bossMonster;
 
 
-    MonsterClickButton clickMonsterButton;
+    MonsterClickButton monsterClickButton;
+    StartGameButton startGameButton;
 
     /// <summary>
     /// 공격게이지를 순서대로 가지고 있을 리스트
@@ -72,8 +88,11 @@ public class GameManager : Singleton<GameManager>
         //Debug.Log($"{monsterDB[3].MonsterName}의 합산 공격 속도 : {lightMonster.totalAttackSpeed}");
         //Debug.Log($"{monsterDB[4].MonsterName}의 합산 공격 속도 : {darkMonster.totalAttackSpeed}");
 
-        clickMonsterButton = FindAnyObjectByType<MonsterClickButton>();     // FindAnyObjectByType? 가 맞나
-        clickMonsterButton.onPickMonster += OnAddAttackGaugeList;
+        monsterClickButton = FindAnyObjectByType<MonsterClickButton>();     // FindAnyObjectByType? 가 맞나
+        if(monsterClickButton != null)
+        {
+            monsterClickButton.onPickMonster += OnAddAttackGaugeList;
+        }
 
         /*attackGaugeList.Add(new MonsterInfo(waterMonster.totalAttackSpeed, waterMonster, waterMonster.name));
         attackGaugeList.Add(new MonsterInfo(fireMonster.totalAttackSpeed, fireMonster, fireMonster.name));
@@ -88,9 +107,11 @@ public class GameManager : Singleton<GameManager>
         }*/
 
         //Sort();
-
         StartGameButton startGameButton = FindAnyObjectByType<StartGameButton>();
-        startGameButton.onGameStart += OnGameStart;
+        if(startGameButton != null)
+        {
+            startGameButton.onBattleSceneLoad += OnBattleSceneLoad;
+        }
 
         /*turnManager.onTurnStart += (_) =>       // 이건 나중에 선택 완료 버튼 누르면 전투씬으로 넘어가고 나서 실행되어야 할듯
         {
@@ -114,17 +135,45 @@ public class GameManager : Singleton<GameManager>
         darkMonster.onDamage += Damage;
         bossMonster.onDamage += Damage;
 
+        SceneManager.sceneLoaded += OnSceneLoaded;
+
     }
 
-    private void OnGameStart()
+    /// <summary>
+    /// 배틀 씬을 불러오는 함수
+    /// </summary>
+    private void OnBattleSceneLoad()
     {
-        turnManager.onTurnStart += (_) =>       // 이건 나중에 선택 완료 버튼 누르면 전투씬으로 넘어가고 나서 실행되어야 할듯
-        {
-            //Debug.Log("onTurnStart 델리게이트 받음");
-            OnAttackGaugeUpdate();      // 턴이 시작되었다는 델리게이트를 받아서 공격게이지들을 조정
-        };
+        gameState = GameState.Play;             // 게임 상태를 Play로 변경
 
-        turnManager.OnInitialize();
+        DontDestroyOnLoad(waterMonster);
+        DontDestroyOnLoad(fireMonster);
+        DontDestroyOnLoad(windMonster);
+        DontDestroyOnLoad(lightMonster);
+        DontDestroyOnLoad(darkMonster);
+        DontDestroyOnLoad(bossMonster);
+
+        //SceneManager.LoadScene("BattleScene");  // BattleScene 불러오기
+        SceneManager.LoadScene("Test_07_BattleScene");  // BattleScene 불러오기
+    }
+
+    void OnSceneLoaded(UnityEngine.SceneManagement.Scene scene, LoadSceneMode mode)
+    {
+        //if (scene.name == "BattleScene")
+        if (scene.name == "Test_07_BattleScene")
+        {
+            //Debug.Log("BattleScene 씬이 성공적으로 불러와졌습니다.");
+            Debug.Log("Test_07_BattleScene 씬이 성공적으로 불러와졌습니다.");     // 씬 불러와졌을 때 배치를 다시하고 선택 안된 애들은 비활성화 하는 작업 필요할 듯
+
+            // 바로 턴 진행되는게 아니라 코루틴으로 좀 느리게 해야할 듯?(씬 이동해야 되서)
+            turnManager.onTurnStart += (_) =>       // 이건 나중에 선택 완료 버튼 누르면 전투씬으로 넘어가고 나서 실행되어야 할듯
+            {
+                //Debug.Log("onTurnStart 델리게이트 받음");
+                OnAttackGaugeUpdate();      // 턴이 시작되었다는 델리게이트를 받아서 공격게이지들을 조정
+            };
+
+            turnManager.OnInitialize();
+        }
     }
 
     /// <summary>
@@ -161,6 +210,11 @@ public class GameManager : Singleton<GameManager>
                 break;
         }
         Sort();
+
+        foreach (var monsterInfo in attackGaugeList)
+        {
+            Debug.Log($"{monsterInfo.Monster.name}의 합산 공격 속도 : {monsterInfo.AttackSpeed}");     // 왜 합산 공격속도가 0이지?
+        }
     }
 
     /// <summary>
@@ -323,8 +377,10 @@ public class GameManager : Singleton<GameManager>
         /// 6. 두번째 몬스터의 공격 게이지를 100으로 만들고 => 올라간 비율 저장
         /// 7. 나머지들도 비율 만큼 올리고
         /// 8. 2번 부터 반복
-
-        GaugeControll();
+        if(gameState == GameState.Play)
+        {
+            GaugeControll();
+        }
     }
 
     /// <summary>

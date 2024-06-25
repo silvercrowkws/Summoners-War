@@ -8,7 +8,7 @@ public class StartGameButton : MonoBehaviour
 {
     Button button;
 
-    public Action onGameStart;
+    public Action onBattleSceneLoad;
 
     private void Awake()
     {
@@ -21,6 +21,6 @@ public class StartGameButton : MonoBehaviour
     /// </summary>
     private void OnGameStart()
     {
-        onGameStart?.Invoke();
+        onBattleSceneLoad?.Invoke();
     }
 }
