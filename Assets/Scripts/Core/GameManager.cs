@@ -5,14 +5,14 @@ using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-
+[Serializable]
 public class MonsterInfo
 {
     public float AttackSpeed { get; set; }
     public MonsterBase Monster { get; set; }
 
     public string MonsterName { get; set; }
-
+    
     public MonsterInfo(float attackSpeed, MonsterBase monster, string monsterName)
     {
         AttackSpeed = attackSpeed;
@@ -26,10 +26,11 @@ public class GameManager : Singleton<GameManager>
     /// <summary>
     /// 게임 상태 표시용 enum
     /// </summary>
-    enum GameState
+    public enum GameState
     {
         None = 0,
         PickMonster,
+        Loading,
         Play,
         End
     }
@@ -37,7 +38,7 @@ public class GameManager : Singleton<GameManager>
     /// <summary>
     /// 현재 게임 상태
     /// </summary>
-    GameState gameState = GameState.None;
+    public GameState gameState = GameState.None;
 
     /// <summary>
     /// 공격 게이지가 변경되었음을 알리는 델리게이트
@@ -70,6 +71,13 @@ public class GameManager : Singleton<GameManager>
     /// </summary>
     public List<MonsterInfo> attackGaugeList = new List<MonsterInfo>();
 
+    public List<string> aaa;
+
+    /// <summary>
+    /// 로딩이 완료되었는지 확인하는 bool 변수
+    /// </summary>
+    public bool loadingComplete = false;
+
     private void Awake()
     {
         //turnManager = FindAnyObjectByType<TurnManager>();       // Start에서 찾으면 순서 문제로 OnInitialize가 안됨
@@ -100,6 +108,8 @@ public class GameManager : Singleton<GameManager>
         attackGaugeList.Add(new MonsterInfo(lightMonster.totalAttackSpeed, lightMonster, lightMonster.name));
         attackGaugeList.Add(new MonsterInfo(darkMonster.totalAttackSpeed, darkMonster, darkMonster.name));
         attackGaugeList.Add(new MonsterInfo(bossMonster.totalAttackSpeed, bossMonster, bossMonster.name));*/
+        attackGaugeList.Add(new MonsterInfo(bossMonster.totalAttackSpeed, bossMonster, bossMonster.name));
+        //Instantiate(bossMonster);
 
         /*foreach (var monsterInfo in attackGaugeList)
         {
@@ -144,7 +154,7 @@ public class GameManager : Singleton<GameManager>
     /// </summary>
     private void OnBattleSceneLoad()
     {
-        gameState = GameState.Play;             // 게임 상태를 Play로 변경
+        gameState = GameState.Loading;             // 게임 상태를 Loading으로 변경
 
         DontDestroyOnLoad(waterMonster);
         DontDestroyOnLoad(fireMonster);
@@ -157,14 +167,53 @@ public class GameManager : Singleton<GameManager>
         SceneManager.LoadScene("Test_07_BattleScene");  // BattleScene 불러오기
     }
 
+    /// <summary>
+    /// 씬이 정상적으로 불러와졌으면, 로딩 이후 전투로 넘어가는 함수
+    /// </summary>
+    /// <param name="scene"></param>
+    /// <param name="mode"></param>
     void OnSceneLoaded(UnityEngine.SceneManagement.Scene scene, LoadSceneMode mode)
     {
         //if (scene.name == "BattleScene")
-        if (scene.name == "Test_07_BattleScene")
+        if (scene.name == "Test_07_BattleScene")    // bool 변수 하나 넣어서 로딩 끝났는지 확인 필요
         {
-            //Debug.Log("BattleScene 씬이 성공적으로 불러와졌습니다.");
-            Debug.Log("Test_07_BattleScene 씬이 성공적으로 불러와졌습니다.");     // 씬 불러와졌을 때 배치를 다시하고 선택 안된 애들은 비활성화 하는 작업 필요할 듯
+            StartCoroutine(WaitLoading());
+            /*if (loadingComplete)
+            {
+                gameState = GameState.Play;             // 게임 상태를 Play로 변경
+                //Debug.Log("BattleScene 씬이 성공적으로 불러와졌습니다.");
+                Debug.Log("Test_07_BattleScene 씬이 성공적으로 불러와졌습니다.");     // 씬 불러와졌을 때 배치를 다시하고 선택 안된 애들은 비활성화 하는 작업 필요할 듯
 
+                // 바로 턴 진행되는게 아니라 코루틴으로 좀 느리게 해야할 듯?(씬 이동해야 되서)
+                turnManager.onTurnStart += (_) =>       // 이건 나중에 선택 완료 버튼 누르면 전투씬으로 넘어가고 나서 실행되어야 할듯
+                {
+                    //Debug.Log("onTurnStart 델리게이트 받음");
+                    OnAttackGaugeUpdate();      // 턴이 시작되었다는 델리게이트를 받아서 공격게이지들을 조정
+                };
+
+                turnManager.OnInitialize2();
+            }*/
+        }
+    }
+
+    /// <summary>
+    /// 로딩이 완료되기를 기다리고 전투화면을 실행시키는 코루틴
+    /// </summary>
+    /// <returns></returns>
+    IEnumerator WaitLoading()
+    {
+        while (!loadingComplete)
+        {
+            yield return null;
+            Debug.Log(loadingComplete);
+        }
+
+        if (loadingComplete)
+        {
+            gameState = GameState.Play;             // 게임 상태를 Play로 변경
+                                                    //Debug.Log("BattleScene 씬이 성공적으로 불러와졌습니다.");
+            Debug.Log("Test_07_BattleScene 씬이 성공적으로 불러와졌습니다.");     // 씬 불러와졌을 때 배치를 다시하고 선택 안된 애들은 비활성화 하는 작업 필요할 듯
+            
             // 바로 턴 진행되는게 아니라 코루틴으로 좀 느리게 해야할 듯?(씬 이동해야 되서)
             turnManager.onTurnStart += (_) =>       // 이건 나중에 선택 완료 버튼 누르면 전투씬으로 넘어가고 나서 실행되어야 할듯
             {
@@ -186,35 +235,51 @@ public class GameManager : Singleton<GameManager>
         {
             case "01_Water Monster":
                 attackGaugeList.Add(new MonsterInfo(waterMonster.totalAttackSpeed, waterMonster, waterMonster.name));
+                //DontDestroyOnLoad(waterMonster);
                 Debug.Log($"{waterMonster.name} 리스트에 추가");
+                Debug.Log($"{waterMonster.totalAttackSpeed}");
+                waterMonster.gameObject.SetActive(true);
                 break;
             case "02_Fire Monster":
                 attackGaugeList.Add(new MonsterInfo(fireMonster.totalAttackSpeed, fireMonster, fireMonster.name));
+                //DontDestroyOnLoad(fireMonster);
                 Debug.Log($"{fireMonster.name} 리스트에 추가");
+                Debug.Log($"{fireMonster.totalAttackSpeed}");
+                fireMonster.gameObject.SetActive(true);
                 break;
             case "03_Wind Monster":
                 attackGaugeList.Add(new MonsterInfo(windMonster.totalAttackSpeed, windMonster, windMonster.name));
+                //DontDestroyOnLoad(windMonster);
                 Debug.Log($"{windMonster.name} 리스트에 추가");
+                Debug.Log($"{windMonster.totalAttackSpeed}");
+                windMonster.gameObject.SetActive(true);
                 break;
             case "04_Light Monster":
                 attackGaugeList.Add(new MonsterInfo(lightMonster.totalAttackSpeed, lightMonster, lightMonster.name));
+                //DontDestroyOnLoad(lightMonster);
                 Debug.Log($"{lightMonster.name} 리스트에 추가");
+                Debug.Log($"{lightMonster.totalAttackSpeed}");
+                lightMonster.gameObject.SetActive(true);
                 break;
             case "05_Dark Monster":
                 attackGaugeList.Add(new MonsterInfo(darkMonster.totalAttackSpeed, darkMonster, darkMonster.name));
+                //DontDestroyOnLoad(darkMonster);
                 Debug.Log($"{darkMonster.name} 리스트에 추가");
+                Debug.Log($"{darkMonster.totalAttackSpeed}");
+                darkMonster.gameObject.SetActive(true);
                 break;
-            case "WolfBoss":
+            /*case "WolfBoss":
                 attackGaugeList.Add(new MonsterInfo(bossMonster.totalAttackSpeed, bossMonster, bossMonster.name));
+                //DontDestroyOnLoad(bossMonster);
                 Debug.Log($"{bossMonster.name} 리스트에 추가");
-                break;
+                break;*/
         }
         Sort();
 
-        foreach (var monsterInfo in attackGaugeList)
+        /*foreach (var monsterInfo in attackGaugeList)
         {
             Debug.Log($"{monsterInfo.Monster.name}의 합산 공격 속도 : {monsterInfo.AttackSpeed}");     // 왜 합산 공격속도가 0이지?
-        }
+        }*/
     }
 
     /// <summary>
@@ -230,7 +295,7 @@ public class GameManager : Singleton<GameManager>
             if(bossMonster.element == Element.Light)                // 이 몬스터의 속성이 빛이면
             {
                 //Debug.Log($"WolfBoss 는 빛속성이다");
-                if (darkMonster.TotalHP > 1)                        // DarkMonster를 공격할 건데 HP가 1이상이면
+                if (darkMonster.gameObject.activeSelf && darkMonster.TotalHP > 1)                        // DarkMonster를 공격할 건데 HP가 1이상이면
                 {
                     ApplyDamage(darkMonster, damage * 1.5f);
                 }
@@ -245,28 +310,28 @@ public class GameManager : Singleton<GameManager>
                         switch (index)
                         {
                             case 1: // 물속성 공격
-                                if (waterMonster.TotalHP > 1)
+                                if (waterMonster.gameObject.activeSelf && waterMonster.TotalHP > 1)
                                 {
                                     ApplyDamage(waterMonster, damage);
                                     return; // 공격 성공 후 함수 종료
                                 }
                                 break;
                             case 2: // 불속성 공격
-                                if (fireMonster.TotalHP > 1)
+                                if (fireMonster.gameObject.activeSelf && fireMonster.TotalHP > 1)
                                 {
                                     ApplyDamage(fireMonster, damage);
                                     return; // 공격 성공 후 함수 종료
                                 }
                                 break;
                             case 3: // 풍속성 공격
-                                if (windMonster.TotalHP > 1)
+                                if (windMonster.gameObject.activeSelf && windMonster.TotalHP > 1)
                                 {
                                     ApplyDamage(windMonster, damage);
                                     return; // 공격 성공 후 함수 종료
                                 }
                                 break;
                             case 4: // 빛속성 공격
-                                if (lightMonster.TotalHP > 1)
+                                if (lightMonster.gameObject.activeSelf && lightMonster.TotalHP > 1)
                                 {
                                     ApplyDamage(lightMonster, damage);
                                     return; // 공격 성공 후 함수 종료
@@ -377,10 +442,7 @@ public class GameManager : Singleton<GameManager>
         /// 6. 두번째 몬스터의 공격 게이지를 100으로 만들고 => 올라간 비율 저장
         /// 7. 나머지들도 비율 만큼 올리고
         /// 8. 2번 부터 반복
-        if(gameState == GameState.Play)
-        {
-            GaugeControll();
-        }
+        GaugeControll();
     }
 
     /// <summary>

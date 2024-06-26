@@ -5,6 +5,7 @@ using Unity.VisualScripting;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static GameManager;
 
 public enum MonsterState
 {
@@ -215,6 +216,16 @@ public class MonsterBase : MonoBehaviour
     /// </summary>
     TurnManager turnManager;
 
+    private void OnValidate()
+    {
+        totalAttackSpeed = monsterDB.baseAttackSpeed + runeDB.upAttackSpeed;
+        totalHP = monsterDB.baseHP * runeDB.upHP;
+        maxHP = monsterDB.baseHP * runeDB.upHP;
+        totalAttackPower = monsterDB.baseAttackPower * runeDB.upAttack;
+        totalDefence = monsterDB.baseDefense * runeDB.upDefense;
+        element = monsterDB.element;
+    }
+
     protected virtual void Awake()
     {
         animator = GetComponent<Animator>();
@@ -223,15 +234,15 @@ public class MonsterBase : MonoBehaviour
 
         onMonsterStateUpdate = Update_Idle;
 
-        totalAttackSpeed = monsterDB.baseAttackSpeed + runeDB.upAttackSpeed;
-
         inputAction = new PlayerInputActions();
+
+        /*totalAttackSpeed = monsterDB.baseAttackSpeed + runeDB.upAttackSpeed;
 
         totalHP = monsterDB.baseHP * runeDB.upHP;
         maxHP = monsterDB.baseHP * runeDB.upHP;
         totalAttackPower = monsterDB.baseAttackPower * runeDB.upAttack;
         totalDefence = monsterDB.baseDefense * runeDB.upDefense;
-        element = monsterDB.element;
+        element = monsterDB.element;*/
 
         if (transform.root.name == "WolfBoss")
         {
@@ -336,11 +347,16 @@ public class MonsterBase : MonoBehaviour
 
     protected virtual void OnAttackAble(InputAction.CallbackContext context)
     {
-        if (this.gameObject.name == gameManager.attackGaugeList[0].Monster.name)        // 본인이 리스트의 맨 앞에 있는 몬스터이면
+        // 본인이 리스트의 맨 앞에 있는 몬스터이다
+        if (this.gameObject.name == gameManager.attackGaugeList[0].Monster.name)
         {
-            Debug.Log($"{gameManager.attackGaugeList[0].Monster.name}의 onBossClick = true");
-            onAttackClick = true;
-            OnDisable();            // 움직임 비활성화
+            // 게임이 Play 상태이다
+            if (gameManager.gameState == GameState.Play)
+            {
+                Debug.Log($"{gameManager.attackGaugeList[0].Monster.name}의 onBossClick = true");
+                onAttackClick = true;
+                OnDisable();            // 움직임 비활성화
+            }
         }
     }
 
@@ -435,7 +451,8 @@ public class MonsterBase : MonoBehaviour
         // 애니메이션 완료할 때까지 기다림
         while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f)      // 애니메이션이 진행 중이면true, 애니메이션이 완료되면 fasle
         {
-            yield return null;
+            //yield return null;
+            yield return new WaitForEndOfFrame();
         }
 
         //yield return null;
@@ -457,7 +474,7 @@ public class MonsterBase : MonoBehaviour
     {
         while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime <= 1.0f)
         {
-            yield return null;
+            yield return new WaitForEndOfFrame();
         }
         
         yield return null;
@@ -473,7 +490,8 @@ public class MonsterBase : MonoBehaviour
     {
         if (attackEnable)                           // 공격이 가능하면
         {
-            yield return null;
+            //yield return null;
+            yield return new WaitForEndOfFrame();
             //Debug.Log("AttackCoroutine 실행");
             //animator.ResetTrigger("Idle");
             ResetAllTrigget();

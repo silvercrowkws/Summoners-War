@@ -32087,7 +32087,7 @@ Transform:
   m_GameObject: {fileID: 7688510059464060725}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -30, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -32132,11 +32132,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   runeDB: {fileID: 11400000, guid: 39e2170defb25dd4ea704f648d7dc2a5, type: 2}
   monsterDB: {fileID: 11400000, guid: c8f9502109d92524f9d426b816e980a1, type: 2}
-  totalAttackSpeed: 0
-  totalAttackPower: 0
-  totalDefence: 0
-  maxHP: 0
-  element: 0
+  totalAttackSpeed: 50
+  totalAttackPower: 90
+  totalDefence: 30
+  maxHP: 100
+  element: 4
   attackEnable: 0
 --- !u!1 &7742144190925515485
 GameObject:
