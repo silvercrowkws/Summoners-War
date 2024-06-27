@@ -46,8 +46,12 @@ public class MonsterNonPickButton : MonoBehaviour
 
             //rectTransforms[i] = buttons[i].GetComponent<RectTransform>();
 
-            int index = i;
-            buttons[i].onClick.AddListener(() => NonPickMonster(index));
+
+                int index = i;
+            buttons[i].onClick.AddListener(() =>
+            {
+                NonPickMonster(index);
+            });
         }
     }
 
@@ -127,11 +131,11 @@ public class MonsterNonPickButton : MonoBehaviour
     /// <summary>
     /// attackGuageList에서 빼라고 알리는 함수
     /// </summary>
-    /// <param name="index"></param>
+    /// <param name="index">전체 비활성화 되어 있던 버튼 중 몇번인가?</param>
     /// <exception cref="NotImplementedException"></exception>
     private void NonPickMonster(int index)
     {
-        Debug.Log("몬스터 비활성화");
+        Debug.Log($"몬스터 비활성화 : {index}");
 
         switch (index)
         {
@@ -187,4 +191,8 @@ public class MonsterNonPickButton : MonoBehaviour
                 break;
         }
     }
+
+    /// 들어갈 위치를 배열로 만들고 index를 0 1 2 3으로 설정한다
+    /// 픽 했을 때 인덱스를 순서대로 준다
+    /// 픽을 취소했을 때 해당 인덱스를 반환한다
 }
