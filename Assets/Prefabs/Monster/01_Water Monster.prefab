@@ -1946,11 +1946,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   runeDB: {fileID: 11400000, guid: e1c479d71e84fe441b331ee6a51134d6, type: 2}
   monsterDB: {fileID: 11400000, guid: 47800a1cac3ee2648aace92369ccc798, type: 2}
-  totalAttackSpeed: 0
-  totalAttackPower: 0
-  totalDefence: 0
-  maxHP: 0
-  element: 0
+  totalAttackSpeed: 20
+  totalAttackPower: 90
+  totalDefence: 20
+  maxHP: 100
+  element: 1
   attackEnable: 0
 --- !u!1 &4231690220252526767
 GameObject:

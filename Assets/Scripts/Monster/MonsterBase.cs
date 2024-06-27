@@ -339,9 +339,6 @@ public class MonsterBase : MonoBehaviour
                 attackProcessed = true;
                 onAttackClick = false;
             }
-
-            // 나중에 여기서 공격 로직 부분 추가 필요
-            // attackTarget의 HP를 깎는 부분
         }
     }
 
@@ -353,6 +350,7 @@ public class MonsterBase : MonoBehaviour
             // 게임이 Play 상태이다
             if (gameManager.gameState == GameState.Play)
             {
+                MonsterState = MonsterState.Attack;     // 추가
                 Debug.Log($"{gameManager.attackGaugeList[0].Monster.name}의 onBossClick = true");
                 onAttackClick = true;
                 OnDisable();            // 움직임 비활성화
@@ -454,7 +452,7 @@ public class MonsterBase : MonoBehaviour
             //yield return null;
             yield return new WaitForEndOfFrame();
         }
-
+        yield return new WaitForEndOfFrame();
         //yield return null;
         //Debug.Log("IdleCoroutine 실행");
         //onAttackClick = false;

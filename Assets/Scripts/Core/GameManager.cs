@@ -64,14 +64,13 @@ public class GameManager : Singleton<GameManager>
 
 
     MonsterClickButton monsterClickButton;
+    MonsterNonPickButton monsterNonPickButton;
     StartGameButton startGameButton;
 
     /// <summary>
     /// 공격게이지를 순서대로 가지고 있을 리스트
     /// </summary>
     public List<MonsterInfo> attackGaugeList = new List<MonsterInfo>();
-
-    public List<string> aaa;
 
     /// <summary>
     /// 로딩이 완료되었는지 확인하는 bool 변수
@@ -96,10 +95,16 @@ public class GameManager : Singleton<GameManager>
         //Debug.Log($"{monsterDB[3].MonsterName}의 합산 공격 속도 : {lightMonster.totalAttackSpeed}");
         //Debug.Log($"{monsterDB[4].MonsterName}의 합산 공격 속도 : {darkMonster.totalAttackSpeed}");
 
-        monsterClickButton = FindAnyObjectByType<MonsterClickButton>();     // FindAnyObjectByType? 가 맞나
+        monsterClickButton = FindAnyObjectByType<MonsterClickButton>();
         if(monsterClickButton != null)
         {
             monsterClickButton.onPickMonster += OnAddAttackGaugeList;
+        }
+
+        monsterNonPickButton = FindAnyObjectByType<MonsterNonPickButton>();
+        if(monsterNonPickButton != null)
+        {
+            monsterNonPickButton.onNonPickMonster += OnRemoveAttackGaugeList;
         }
 
         /*attackGaugeList.Add(new MonsterInfo(waterMonster.totalAttackSpeed, waterMonster, waterMonster.name));
@@ -280,6 +285,44 @@ public class GameManager : Singleton<GameManager>
         {
             Debug.Log($"{monsterInfo.Monster.name}의 합산 공격 속도 : {monsterInfo.AttackSpeed}");     // 왜 합산 공격속도가 0이지?
         }*/
+    }
+
+    /// <summary>
+    /// 취소한 몬스터를 AttackGaugeList에서 제거하는 함수
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="arg2"></param>
+    private void OnRemoveAttackGaugeList(string name, int arg2)
+    {
+        MonsterInfo monsterToRemove = attackGaugeList.Find(info => info.MonsterName == name);
+
+        if (monsterToRemove != null)
+        {
+            attackGaugeList.Remove(monsterToRemove);
+            Debug.Log($"{name} 리스트에서 제거");
+
+            switch (name)
+            {
+                case "01_Water Monster":
+                    waterMonster.gameObject.SetActive(false);
+                    break;
+                case "02_Fire Monster":
+                    fireMonster.gameObject.SetActive(false);
+                    break;
+                case "03_Wind Monster":
+                    windMonster.gameObject.SetActive(false);
+                    break;
+                case "04_Light Monster":
+                    lightMonster.gameObject.SetActive(false);
+                    break;
+                case "05_Dark Monster":
+                    darkMonster.gameObject.SetActive(false);
+                    break;
+            }
+
+            // 제거 후 정렬
+            Sort();
+        }
     }
 
     /// <summary>
