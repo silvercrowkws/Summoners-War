@@ -174,3 +174,9 @@ public class MonsterNonPickButton : MonoBehaviour
         }
     }
 }
+
+/// 다음에 할 것
+/// 1. 선택된 몬스터의 개수에 따라 몬스터 간격 조절하기?
+/// 2. 승리 패배시 출력될 패널 만들기
+/// 2.1 승리 확인은 MonsterBase에서 보스의 onDie가 확인되었을 경우
+/// 2.2 패배 확인은 GameManager의 Damage 함수에서 보스가 공격할 경우 남은 적들이 HP가 모두 없을 경우?
