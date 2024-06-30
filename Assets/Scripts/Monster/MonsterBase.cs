@@ -318,11 +318,13 @@ public class MonsterBase : MonoBehaviour
                         //animator.ResetTrigger("Idle");
                         ResetAllTrigget();
                         animator.SetTrigger("Attack1");
+                        StartCoroutine(Yield());                // 가끔 공격 모션 나오다가 바로 대기 상태로 넘어가는 문제 있음
                         break;
                     case 2:
                         //animator.ResetTrigger("Idle");
                         ResetAllTrigget();
                         animator.SetTrigger("Attack2");
+                        StartCoroutine(Yield());
                         break;
                 }
                 Debug.Log("보스 공격 애니메이션 실행");
@@ -530,5 +532,12 @@ public class MonsterBase : MonoBehaviour
         animator.ResetTrigger("Die");
     }
 
-    /// 자기 차례에 맞으면 생기는 문제 때문인거 같은데
+    /// <summary>
+    /// 다음 프레임까지 기다리게 시키는 코루틴
+    /// </summary>
+    /// <returns></returns>
+    IEnumerator Yield()
+    {
+        yield return new WaitForEndOfFrame();
+    }
 }

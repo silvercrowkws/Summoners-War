@@ -77,6 +77,12 @@ public class GameManager : Singleton<GameManager>
     /// </summary>
     public bool loadingComplete = false;
 
+    /// <summary>
+    /// 어떤 몬스터가 죽었는지 알리는 델리게이트
+    /// </summary>
+    public Action<string> anyMonsterDie;
+
+
     private void Awake()
     {
         //turnManager = FindAnyObjectByType<TurnManager>();       // Start에서 찾으면 순서 문제로 OnInitialize가 안됨
@@ -440,6 +446,7 @@ public class GameManager : Singleton<GameManager>
         {
             attackGaugeList.Remove(monsterToRemove);
             Debug.Log($"{monsterName} 가 죽었다");
+            anyMonsterDie?.Invoke(monsterName);     // 어떤 몬스터가 죽었는지 ResultPanel에 알림
         }
         else
         {
