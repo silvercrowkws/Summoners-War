@@ -11815,9 +11815,9 @@ MonoBehaviour:
   runeDB: {fileID: 11400000, guid: 9b65aae486cd3bc43afbb0e9425e28bc, type: 2}
   monsterDB: {fileID: 11400000, guid: 32bc37d50a21c74408070d5d74cc7923, type: 2}
   totalAttackSpeed: 60
-  totalAttackPower: 90
+  totalAttackPower: 150
   totalDefence: 75
-  maxHP: 150
+  maxHP: 200
   element: 5
   attackEnable: 0
 --- !u!1 &4968475907637010146

@@ -216,6 +216,11 @@ public class MonsterBase : MonoBehaviour
     /// </summary>
     TurnManager turnManager;
 
+    /// <summary>
+    /// 공격 했으니 데미지를 주라고 알리는 델리게이트
+    /// </summary>
+    public Action<string, float> onDamage;
+
     private void OnValidate()
     {
         totalAttackSpeed = monsterDB.baseAttackSpeed + runeDB.upAttackSpeed;
@@ -305,41 +310,44 @@ public class MonsterBase : MonoBehaviour
     /// </summary>
     protected virtual void Update_Attack()
     {
-        //if (monsterState == MonsterState.Attack && onAttackClick && !attackProcessed)
-        if (onAttackClick && !attackProcessed)
+        if(gameManager.gameState == GameState.Play)     // 게임 상태가 Play이고
         {
-            if(transform.root.name == "WolfBoss")
+            //if (monsterState == MonsterState.Attack && onAttackClick && !attackProcessed)
+            if (onAttackClick && !attackProcessed)
             {
-                // 보스 몬스터인 경우
-                int index = UnityEngine.Random.Range(1, 3);     // 1또는 2를 뽑아서
-                switch (index)  // 지금은 50% 확률로 나오는데, 1이 나올 확률을 키우고 2가 나올 확률을 줄여서
-                {               // 1은 데미지 적당하게, 2는 세게 수정할까?
-                    case 1:
-                        //animator.ResetTrigger("Idle");
-                        ResetAllTrigget();
-                        animator.SetTrigger("Attack1");
-                        StartCoroutine(Yield());                // 가끔 공격 모션 나오다가 바로 대기 상태로 넘어가는 문제 있음
-                        break;
-                    case 2:
-                        //animator.ResetTrigger("Idle");
-                        ResetAllTrigget();
-                        animator.SetTrigger("Attack2");
-                        StartCoroutine(Yield());
-                        break;
+                if(transform.root.name == "WolfBoss")
+                {
+                    // 보스 몬스터인 경우
+                    int index = UnityEngine.Random.Range(1, 3);     // 1또는 2를 뽑아서
+                    switch (index)  // 지금은 50% 확률로 나오는데, 1이 나올 확률을 키우고 2가 나올 확률을 줄여서
+                    {               // 1은 데미지 적당하게, 2는 세게 수정할까?
+                        case 1:
+                            //animator.ResetTrigger("Idle");
+                            ResetAllTrigget();
+                            animator.SetTrigger("Attack1");
+                            StartCoroutine(Yield());                // 가끔 공격 모션 나오다가 바로 대기 상태로 넘어가는 문제 있음
+                            break;
+                        case 2:
+                            //animator.ResetTrigger("Idle");
+                            ResetAllTrigget();
+                            animator.SetTrigger("Attack2");
+                            StartCoroutine(Yield());
+                            break;
+                    }
+                    Debug.Log("보스 공격 애니메이션 실행");
+                    attackProcessed = true;
+                    onAttackClick = false;
                 }
-                Debug.Log("보스 공격 애니메이션 실행");
-                attackProcessed = true;
-                onAttackClick = false;
-            }
-            else
-            {
-                // 보스 몬스터가 아닌 경우
-                //animator.ResetTrigger("Idle");
-                ResetAllTrigget();
-                animator.SetTrigger("Attack");
-                Debug.Log("공격 애니메이션 실행");
-                attackProcessed = true;
-                onAttackClick = false;
+                else
+                {
+                    // 보스 몬스터가 아닌 경우
+                    //animator.ResetTrigger("Idle");
+                    ResetAllTrigget();
+                    animator.SetTrigger("Attack");
+                    Debug.Log("공격 애니메이션 실행");
+                    attackProcessed = true;
+                    onAttackClick = false;
+                }
             }
         }
     }
@@ -416,8 +424,6 @@ public class MonsterBase : MonoBehaviour
         }
 
     }
-
-    public Action<string, float> onDamage;
 
     /// <summary>
     /// 애니메이션 이벤트로 파티클 종료

@@ -49,7 +49,7 @@ public class Singleton<T> : MonoBehaviour where T : Component
         }
     }
 
-    private void Awake()
+    virtual protected void Awake()
     {
         if(instance == null)        // 씬에 이미 배치된 다른 싱글톤이 없다.
         {
@@ -61,7 +61,8 @@ public class Singleton<T> : MonoBehaviour where T : Component
             // 이미 씬에 싱글톤이 있다.
             if(instance != this)    // 그게 나자신이 아니면
             {
-                Destroy(this.gameObject);   // 나자신을 삭제
+                //Destroy(this.gameObject);   // 나자신을 삭제
+                Destroy(instance.gameObject);   // 걔 를 삭제
             }
         }
     }

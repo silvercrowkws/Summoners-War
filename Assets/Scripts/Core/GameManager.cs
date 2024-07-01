@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -29,7 +30,7 @@ public class GameManager : Singleton<GameManager>
     public enum GameState
     {
         None = 0,
-        PickMonster,
+        //PickMonster,
         Loading,
         Play,
         End
@@ -70,7 +71,7 @@ public class GameManager : Singleton<GameManager>
     /// <summary>
     /// 공격게이지를 순서대로 가지고 있을 리스트
     /// </summary>
-    public List<MonsterInfo> attackGaugeList = new List<MonsterInfo>();
+    public List<MonsterInfo> attackGaugeList;   // = new List<MonsterInfo>();
 
     /// <summary>
     /// 로딩이 완료되었는지 확인하는 bool 변수
@@ -82,10 +83,18 @@ public class GameManager : Singleton<GameManager>
     /// </summary>
     public Action<string> anyMonsterDie;
 
+    /// <summary>
+    /// 픽한 몬스터의 수를 확인하고 죽으면 감소시킬 변수
+    /// </summary>
+    public int monsterAliveCount = 0;
 
-    private void Awake()
+
+    protected override void Awake()
     {
+        base.Awake();
+        
         //turnManager = FindAnyObjectByType<TurnManager>();       // Start에서 찾으면 순서 문제로 OnInitialize가 안됨
+        attackGaugeList = new List<MonsterInfo>();
     }
 
     private void Start()
@@ -128,8 +137,9 @@ public class GameManager : Singleton<GameManager>
         }*/
 
         //Sort();
-        StartGameButton startGameButton = FindAnyObjectByType<StartGameButton>();
-        if(startGameButton != null)
+        //StartGameButton startGameButton = FindAnyObjectByType<StartGameButton>();
+        startGameButton = FindAnyObjectByType<StartGameButton>();
+        if (startGameButton != null)
         {
             startGameButton.onBattleSceneLoad += OnBattleSceneLoad;
         }
@@ -156,7 +166,7 @@ public class GameManager : Singleton<GameManager>
         darkMonster.onDamage += Damage;
         bossMonster.onDamage += Damage;
 
-        SceneManager.sceneLoaded += OnSceneLoaded;
+        SceneManager.sceneLoaded += OnSceneLoaded2;
 
     }
 
@@ -183,27 +193,12 @@ public class GameManager : Singleton<GameManager>
     /// </summary>
     /// <param name="scene"></param>
     /// <param name="mode"></param>
-    void OnSceneLoaded(UnityEngine.SceneManagement.Scene scene, LoadSceneMode mode)
+    void OnSceneLoaded2(UnityEngine.SceneManagement.Scene scene, LoadSceneMode mode)
     {
         //if (scene.name == "BattleScene")
-        if (scene.name == "Test_07_BattleScene")    // bool 변수 하나 넣어서 로딩 끝났는지 확인 필요
+        if (scene.name == "Test_07_BattleScene")
         {
             StartCoroutine(WaitLoading());
-            /*if (loadingComplete)
-            {
-                gameState = GameState.Play;             // 게임 상태를 Play로 변경
-                //Debug.Log("BattleScene 씬이 성공적으로 불러와졌습니다.");
-                Debug.Log("Test_07_BattleScene 씬이 성공적으로 불러와졌습니다.");     // 씬 불러와졌을 때 배치를 다시하고 선택 안된 애들은 비활성화 하는 작업 필요할 듯
-
-                // 바로 턴 진행되는게 아니라 코루틴으로 좀 느리게 해야할 듯?(씬 이동해야 되서)
-                turnManager.onTurnStart += (_) =>       // 이건 나중에 선택 완료 버튼 누르면 전투씬으로 넘어가고 나서 실행되어야 할듯
-                {
-                    //Debug.Log("onTurnStart 델리게이트 받음");
-                    OnAttackGaugeUpdate();      // 턴이 시작되었다는 델리게이트를 받아서 공격게이지들을 조정
-                };
-
-                turnManager.OnInitialize2();
-            }*/
         }
     }
 
@@ -286,6 +281,7 @@ public class GameManager : Singleton<GameManager>
                 break;*/
         }
         Sort();
+        monsterAliveCount++;
 
         /*foreach (var monsterInfo in attackGaugeList)
         {
@@ -328,6 +324,7 @@ public class GameManager : Singleton<GameManager>
 
             // 제거 후 정렬
             Sort();
+            monsterAliveCount--;
         }
     }
 
@@ -387,7 +384,7 @@ public class GameManager : Singleton<GameManager>
                                 }
                                 break;
                         }
-                    } while (true);
+                    } while (monsterAliveCount != 0);        // monsterAliveCount(살아있는 몬스터 수)
                 }
             }
         }
@@ -473,6 +470,7 @@ public class GameManager : Singleton<GameManager>
 
     protected override void OnInitialize()
     {
+        base.OnInitialize();
         //turnManager.OnInitialize2();
     }
 
@@ -584,6 +582,35 @@ public class GameManager : Singleton<GameManager>
         //Debug.Log($"맨 뒤 몬스터의 이름 : {attackGaugeList[4].Monster.name}");
 
         // 공격이 가능하다고 알리고 바로 공격게이지를 변경하고 있음
+    }
+
+    /// <summary>
+    /// 게임이 종료되고 재시작될 때 실행할 함수
+    /// </summary>
+    public void EndProcess()
+    {
+        monsterAliveCount = 0;
+
+        waterMonster.gameObject.SetActive(false);
+
+        fireMonster.gameObject.SetActive(false);
+
+        windMonster.gameObject.SetActive(false);
+
+        lightMonster.gameObject.SetActive(false);
+
+        darkMonster.gameObject.SetActive(false);
+
+        bossMonster.gameObject.SetActive(false);
+
+        gameState = GameState.None;
+        //attackGaugeList.Clear();
+        attackGaugeList = new List<MonsterInfo>();
+
+        attackGaugeList.Add(new MonsterInfo(bossMonster.totalAttackSpeed, bossMonster, bossMonster.name));
+        //bossMonster.gameObject.SetActive(true);
+
+        Sort();
     }
 
 #if UNITY_EDITOR

@@ -1,40 +1,52 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class ResultPanel : MonoBehaviour
 {
     /// <summary>
-    /// 승리시 보일 게임 오브젝트
+    /// 승리시 보일 텍스트
     /// </summary>
-    GameObject victory;
+    TextMeshProUGUI victoryText;
 
     /// <summary>
-    /// 패배 시 보일 게임 오브젝트
+    /// 패배 시 보일 텍스트
     /// </summary>
-    GameObject defeat;
+    TextMeshProUGUI defeatText;
+
+    GameObject panel;
 
     /// <summary>
     /// 게임 매니저
     /// </summary>
     GameManager gameManager;
 
+    /// <summary>
+    /// 보스 이외의 몬스터가 죽었을 때 증가될 변수
+    /// </summary>
+    //public int dieCount = 0;
+
+
     private void Start()
     {
         gameManager = GameManager.Instance;
         gameManager.anyMonsterDie += RefreshResultPanel;
 
-        Transform child = transform.GetChild(0);
-        victory = child.GetComponent<GameObject>();     // 0번째 자식 victory
+        panel = transform.GetChild(0).gameObject;
 
-        child = transform.GetChild(1);
-        defeat = child.GetComponent<GameObject>();      // 1번째 자식 defeat
-        
-        //victory.gameObject.SetActive(false);
-        //defeat.gameObject.SetActive(false);
+        Transform child = transform.GetChild(0);        // 0번째 자식 Panel
 
-        this.gameObject.SetActive(false);               // 이 게임 오브젝트 비활성화
+        //child = child.transform.GetChild(0);            // Panel의 0번째 자식 VictoryText
+        //victoryText = child.GetComponent<TextMeshProUGUI>();
+        victoryText = child.GetChild(0).GetComponent<TextMeshProUGUI>();
+
+        //child = child.transform.GetChild(1);            // Panel의 0번째 자식 DefeatText
+        //defeatText = child.GetComponent<TextMeshProUGUI>();
+        defeatText = child.GetChild(1).GetComponent<TextMeshProUGUI>();
+
+        panel.gameObject.SetActive(false);              // 패널 비활성화
     }
 
     /// <summary>
@@ -43,26 +55,29 @@ public class ResultPanel : MonoBehaviour
     /// <param name="monsterName">죽은 몬스터의 이름</param>
     private void RefreshResultPanel(string monsterName)
     {
-        int dieCount = 0;       // 보스 이외의 몬스터가 죽었을 때 증가될 변수
-        
-        // 문제가 좀 있는데...
-
         if(monsterName == "WolfBoss")
         {
-            this.gameObject.SetActive(true);
-            defeat.gameObject.SetActive(false);
-            victory.gameObject.SetActive(true);
+            // 죽은 몬스터가 보스면
+            panel.gameObject.SetActive(true);           // 패널 활성화
+            defeatText.gameObject.SetActive(false);     // 패배 비활성화
+            victoryText.gameObject.SetActive(true);     // 승리 활성화
+            gameManager.gameState = GameManager.GameState.End;
         }
         else
         {
-            dieCount++;
+            // 보스가 죽은게 아니면
+            //dieCount++;                             // dieCount를 누적하고
+            gameManager.monsterAliveCount--;
+            Debug.Log($"남은 몹 숫자 : {gameManager.monsterAliveCount}");
         }
 
-        if(dieCount == 1)
+        if(gameManager.monsterAliveCount == 0)
         {
-            this.gameObject.SetActive(true);
-            victory.gameObject.SetActive(false);
-            defeat.gameObject.SetActive(true);
+            // dieCount가 monsterCount이면
+            panel.gameObject.SetActive(true);           // 패널 활성화
+            victoryText.gameObject.SetActive(false);    // 승리 비활성화
+            defeatText.gameObject.SetActive(true);      // 패배 활성화
+            gameManager.gameState = GameManager.GameState.End;
         }
     }
 }

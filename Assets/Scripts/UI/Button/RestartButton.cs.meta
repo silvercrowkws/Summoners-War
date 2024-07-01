@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: 721ad99dee6a111438d26bf4c4191a7f
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - waterMonster: {instanceID: 0}
+  - fireMonster: {instanceID: 0}
+  - windMonster: {instanceID: 0}
+  - lightMonster: {instanceID: 0}
+  - darkMonster: {instanceID: 0}
+  - bossMonster: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
