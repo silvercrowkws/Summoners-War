@@ -271,9 +271,10 @@ public class MonsterBase : MonoBehaviour
     {
         gameManager = GameManager.Instance;
         gameManager.onAttackReady += OnAttackReady;
+        gameManager.onSceneComplete += OnSceneComplete;
 
         inputAction.Input.Enable();
-        inputAction.Input.Attack.canceled += OnAttackAble;          // 이것도 누를때마다 실행되서 변수 계속 바꾸는 문제가 있음
+        inputAction.Input.Attack.canceled += OnAttackAble;
         //inputAction.Input.Attack.performed += OnAttackAble;         // 또는 canceled 대신 performed로 설정
     }
 
@@ -284,12 +285,19 @@ public class MonsterBase : MonoBehaviour
         inputAction.Input.Disable();
     }
 
+    /// <summary>
+    /// 배틀 씬 로딩이 완료되어 A버튼과 공격을 연결시킴
+    /// </summary>
+    private void OnSceneComplete()
+    {
+        aButton = FindAnyObjectByType<AButton>();
+        aButton.onAClick += OnAttackClick;
+        //aButton.onAClick += OnAttackAble2;
+    }
+
     protected virtual void Start()
     {
         turnManager = FindAnyObjectByType<TurnManager>();
-
-        /*aButton = FindAnyObjectByType<AButton>();
-        aButton.onAClick += OnAttackClick;*/        // 왜 문제 생기는거지
 
         //gameManager = GameManager.Instance;
         //gameManager.onAttackReady += OnAttackReady;
@@ -379,9 +387,8 @@ public class MonsterBase : MonoBehaviour
         }
     }
 
-    private void OnAttackClick()
+    /*public void OnAttackAble2()
     {
-        // 본인이 리스트의 맨 앞에 있는 몬스터이다
         if (this.gameObject.name == gameManager.attackGaugeList[0].Monster.name)
         {
             // 게임이 Play 상태이다
@@ -393,6 +400,15 @@ public class MonsterBase : MonoBehaviour
                 OnDisable();            // 움직임 비활성화
             }
         }
+    }*/
+
+    private void OnAttackClick()
+    {
+        Debug.Log("OnAttackClick 실행");
+        // 임시 CallbackContext 생성
+        InputAction.CallbackContext context = new InputAction.CallbackContext();
+        // OnAttackAble 호출
+        OnAttackAble(context);
     }
 
 

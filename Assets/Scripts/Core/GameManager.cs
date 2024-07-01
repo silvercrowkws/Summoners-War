@@ -51,6 +51,11 @@ public class GameManager : Singleton<GameManager>
     /// </summary>
     public Action<string, float> MonsterHPChange;
 
+    /// <summary>
+    /// 배틀씬 로딩이 완료되었다고 알리는 델리게이트
+    /// </summary>
+    public Action onSceneComplete;
+
     TurnManager turnManager;
     MonsterBase monsterBase;
     //public MonsterDB[] monsterDB;
@@ -219,7 +224,9 @@ public class GameManager : Singleton<GameManager>
             gameState = GameState.Play;             // 게임 상태를 Play로 변경
                                                     //Debug.Log("BattleScene 씬이 성공적으로 불러와졌습니다.");
             Debug.Log("Test_07_BattleScene 씬이 성공적으로 불러와졌습니다.");     // 씬 불러와졌을 때 배치를 다시하고 선택 안된 애들은 비활성화 하는 작업 필요할 듯
-            
+
+            onSceneComplete?.Invoke();
+
             // 바로 턴 진행되는게 아니라 코루틴으로 좀 느리게 해야할 듯?(씬 이동해야 되서)
             turnManager.onTurnStart += (_) =>       // 이건 나중에 선택 완료 버튼 누르면 전투씬으로 넘어가고 나서 실행되어야 할듯
             {

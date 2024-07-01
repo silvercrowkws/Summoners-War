@@ -9,11 +9,20 @@ public class AButton : MonoBehaviour
 {
     Button aButton;
 
+    /// <summary>
+    /// A키를 눌렀다고 알리는 델리게이트
+    /// </summary>
+    public Action onAClick;
+
     private void Awake()
     {
         aButton = GetComponent<Button>();
         aButton.onClick.AddListener(OnAClick);
-        aButton.gameObject.SetActive(false);
+    }
+
+    private void Start()
+    {
+        //aButton.gameObject.SetActive(false);
     }
 
     private void OnAClick()
@@ -21,9 +30,4 @@ public class AButton : MonoBehaviour
         // 공격함수와 연결 필요
         onAClick?.Invoke();
     }
-
-    /// <summary>
-    /// A키를 눌렀다고 알리는 델리게이트
-    /// </summary>
-    public Action onAClick;
 }
