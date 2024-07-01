@@ -14,7 +14,5 @@ public class BossMonster : MonsterBase
     protected override void Start()
     {
         base.Start();
-        
-        // 보스 전용 룬도 따로 만들어야 함
     }
 }

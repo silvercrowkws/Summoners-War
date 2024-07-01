@@ -6,6 +6,7 @@ using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using static GameManager;
+using static UnityEditor.Timeline.TimelinePlaybackControls;
 
 public enum MonsterState
 {
@@ -221,6 +222,11 @@ public class MonsterBase : MonoBehaviour
     /// </summary>
     public Action<string, float> onDamage;
 
+    /// <summary>
+    /// 공격과 연결되는 버튼
+    /// </summary>
+    AButton aButton;
+
     private void OnValidate()
     {
         totalAttackSpeed = monsterDB.baseAttackSpeed + runeDB.upAttackSpeed;
@@ -281,6 +287,10 @@ public class MonsterBase : MonoBehaviour
     protected virtual void Start()
     {
         turnManager = FindAnyObjectByType<TurnManager>();
+
+        /*aButton = FindAnyObjectByType<AButton>();
+        aButton.onAClick += OnAttackClick;*/        // 왜 문제 생기는거지
+
         //gameManager = GameManager.Instance;
         //gameManager.onAttackReady += OnAttackReady;
         //Debug.Log($"룬 번호 : {runeDB.runeNumber}");
@@ -352,7 +362,24 @@ public class MonsterBase : MonoBehaviour
         }
     }
 
-    protected virtual void OnAttackAble(InputAction.CallbackContext context)
+    //protected virtual void OnAttackAble(InputAction.CallbackContext context)
+    public void OnAttackAble(InputAction.CallbackContext context)
+    {
+        // 본인이 리스트의 맨 앞에 있는 몬스터이다
+        if (this.gameObject.name == gameManager.attackGaugeList[0].Monster.name)
+        {
+            // 게임이 Play 상태이다
+            if (gameManager.gameState == GameState.Play)
+            {
+                MonsterState = MonsterState.Attack;     // 추가
+                Debug.Log($"{gameManager.attackGaugeList[0].Monster.name}의 onBossClick = true");
+                onAttackClick = true;
+                OnDisable();            // 움직임 비활성화
+            }
+        }
+    }
+
+    private void OnAttackClick()
     {
         // 본인이 리스트의 맨 앞에 있는 몬스터이다
         if (this.gameObject.name == gameManager.attackGaugeList[0].Monster.name)
