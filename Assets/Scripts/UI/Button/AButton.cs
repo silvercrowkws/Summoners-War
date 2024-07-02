@@ -6,19 +6,19 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using static GameManager;
 
-public class AButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
+public class AButton : MonoBehaviour//, IPointerDownHandler, IPointerUpHandler
 {
     Button aButton;
 
     /// <summary>
     /// 버튼의 이미지
     /// </summary>
-    Image image;
+    //Image image;
 
     /// <summary>
     /// IPointer 핸들러로 눌렸을 때, 떨어졌을 때 바뀔 이미지
     /// </summary>
-    public Sprite[] sprites;
+    //public Sprite[] sprites;      // 버그 수정해서 Button 컴포넌트의 Pressed Sprite로 수정하고 있음
 
     /// <summary>
     /// A키를 눌렀다고 알리는 델리게이트
@@ -28,17 +28,18 @@ public class AButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     private void Awake()
     {
         aButton = GetComponent<Button>();
-        //aButton.onClick.AddListener(OnAClick);
-        image = aButton.GetComponent<Image>();
+        aButton.onClick.AddListener(OnAClick);
+        //image = aButton.GetComponent<Image>();
     }
 
     private void Start()
     {
         //aButton.gameObject.SetActive(false);
+        
     }
 
     /// <summary>
-    /// onClick로 작동할 함수
+    /// onClick으로 작동할 함수
     /// </summary>
     private void OnAClick()
     {
@@ -46,7 +47,7 @@ public class AButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         onAClick?.Invoke();
     }
 
-    /// <summary>
+    /*/// <summary>
     /// IPointer 핸들러로 눌러졌을 때
     /// </summary>
     /// <param name="eventData"></param>
@@ -65,5 +66,5 @@ public class AButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         Debug.Log("A 버튼 땜");
         image.sprite = sprites[0];
         onAClick?.Invoke();
-    }
+    }*/
 }

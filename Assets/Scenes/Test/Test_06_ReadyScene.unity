@@ -142,9 +142,25 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 575646739657794919, guid: 226ff7adcd5f18b458cb0c4f007c1f02, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2490785437336148240, guid: 226ff7adcd5f18b458cb0c4f007c1f02, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0.286
+      objectReference: {fileID: 0}
+    - target: {fileID: 2490785437336148240, guid: 226ff7adcd5f18b458cb0c4f007c1f02, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4935554186296833946, guid: 226ff7adcd5f18b458cb0c4f007c1f02, type: 3}
       propertyPath: m_Name
       value: 05_Dark Monster
+      objectReference: {fileID: 0}
+    - target: {fileID: 4935554186296833946, guid: 226ff7adcd5f18b458cb0c4f007c1f02, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7800970568989005516, guid: 226ff7adcd5f18b458cb0c4f007c1f02, type: 3}
       propertyPath: m_LocalPosition.x
@@ -524,6 +540,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1462943797178487783, guid: 756d86305cdfff440a6f404ffa04d322, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1462943797178487783, guid: 756d86305cdfff440a6f404ffa04d322, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5313686322573222119, guid: 756d86305cdfff440a6f404ffa04d322, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5313686322573222119, guid: 756d86305cdfff440a6f404ffa04d322, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6744980566228237168, guid: 756d86305cdfff440a6f404ffa04d322, type: 3}
       propertyPath: m_LocalPosition.x
       value: -20
@@ -621,9 +653,25 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3921357314346673551, guid: bf932a6cb67525a43b7a90f06436947a, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0.286
+      objectReference: {fileID: 0}
+    - target: {fileID: 3921357314346673551, guid: bf932a6cb67525a43b7a90f06436947a, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6020635283365649435, guid: bf932a6cb67525a43b7a90f06436947a, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7879890527048427852, guid: bf932a6cb67525a43b7a90f06436947a, type: 3}
       propertyPath: m_Name
       value: 03_Wind Monster
+      objectReference: {fileID: 0}
+    - target: {fileID: 7879890527048427852, guid: bf932a6cb67525a43b7a90f06436947a, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -692,6 +740,22 @@ PrefabInstance:
     - target: {fileID: 7688510059464060725, guid: 99a7b6fa52c8c824b90af771db7df02e, type: 3}
       propertyPath: m_Name
       value: 04_Light Monster
+      objectReference: {fileID: 0}
+    - target: {fileID: 7688510059464060725, guid: 99a7b6fa52c8c824b90af771db7df02e, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7970425710193844984, guid: 99a7b6fa52c8c824b90af771db7df02e, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8258095713415553224, guid: 99a7b6fa52c8c824b90af771db7df02e, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0.286
+      objectReference: {fileID: 0}
+    - target: {fileID: 8258095713415553224, guid: 99a7b6fa52c8c824b90af771db7df02e, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -784,6 +848,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 304547990586377888, guid: fc33402d9bbb34148a3488aafa21f8da, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 304547990586377888, guid: fc33402d9bbb34148a3488aafa21f8da, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2436461222728419361, guid: fc33402d9bbb34148a3488aafa21f8da, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2436461222728419361, guid: fc33402d9bbb34148a3488aafa21f8da, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3452168472467419300, guid: fc33402d9bbb34148a3488aafa21f8da, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -828,6 +908,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: 01_Water Monster
       objectReference: {fileID: 0}
+    - target: {fileID: 4227891921044245270, guid: fc33402d9bbb34148a3488aafa21f8da, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -841,9 +925,29 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2824474939180395714, guid: 074812939fa663040bc6cdf30113ede0, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0.308
+      objectReference: {fileID: 0}
+    - target: {fileID: 2824474939180395714, guid: 074812939fa663040bc6cdf30113ede0, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3621882729620244963, guid: 074812939fa663040bc6cdf30113ede0, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0.286
+      objectReference: {fileID: 0}
+    - target: {fileID: 3621882729620244963, guid: 074812939fa663040bc6cdf30113ede0, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5834414330391174428, guid: 074812939fa663040bc6cdf30113ede0, type: 3}
       propertyPath: m_Name
       value: 02_Fire Monster
+      objectReference: {fileID: 0}
+    - target: {fileID: 5834414330391174428, guid: 074812939fa663040bc6cdf30113ede0, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6074452178057266669, guid: 074812939fa663040bc6cdf30113ede0, type: 3}
       propertyPath: m_LocalPosition.x

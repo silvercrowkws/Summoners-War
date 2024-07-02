@@ -270,8 +270,7 @@ public class MonsterBase : MonoBehaviour
     private void OnEnable()
     {
         gameManager = GameManager.Instance;
-        gameManager.onAttackReady += OnAttackReady;
-        gameManager.onSceneComplete += OnSceneComplete;
+        gameManager.onAttackReady += OnAttackReady;        
 
         inputAction.Input.Enable();
         inputAction.Input.Attack.canceled += OnAttackAble;
@@ -291,14 +290,14 @@ public class MonsterBase : MonoBehaviour
     private void OnSceneComplete()
     {
         aButton = FindAnyObjectByType<AButton>();
-        aButton.onAClick += OnAttackClick;
+        aButton.onAClick += OnAClick;
         //aButton.onAClick += OnAttackAble2;
     }
 
     protected virtual void Start()
     {
         turnManager = FindAnyObjectByType<TurnManager>();
-
+        gameManager.onSceneComplete += OnSceneComplete;
         //gameManager = GameManager.Instance;
         //gameManager.onAttackReady += OnAttackReady;
         //Debug.Log($"룬 번호 : {runeDB.runeNumber}");
@@ -405,9 +404,9 @@ public class MonsterBase : MonoBehaviour
     /// <summary>
     /// A버튼과 공격을 연결하기 위한 함수
     /// </summary>
-    private void OnAttackClick()
+    private void OnAClick()
     {
-        //Debug.Log("OnAttackClick 실행");
+        //Debug.Log("OnAClick 실행");
         InputAction.CallbackContext context = new InputAction.CallbackContext();        // 임시 CallbackContext 생성
         OnAttackAble(context);                                                          // OnAttackAble 호출
     }

@@ -93,7 +93,6 @@ public class GameManager : Singleton<GameManager>
     /// </summary>
     public int monsterAliveCount = 0;
 
-
     protected override void Awake()
     {
         base.Awake();
@@ -180,6 +179,7 @@ public class GameManager : Singleton<GameManager>
         SceneManager.sceneLoaded += OnSceneLoaded2;
 
     }
+    
 
     /// <summary>
     /// 배틀 씬을 불러오는 함수
@@ -230,7 +230,7 @@ public class GameManager : Singleton<GameManager>
             gameState = GameState.Play;             // 게임 상태를 Play로 변경
                                                     //Debug.Log("BattleScene 씬이 성공적으로 불러와졌습니다.");
             Debug.Log("Test_07_BattleScene 씬이 성공적으로 불러와졌습니다.");     // 씬 불러와졌을 때 배치를 다시하고 선택 안된 애들은 비활성화 하는 작업 필요할 듯
-
+            
             onSceneComplete?.Invoke();
 
             // 바로 턴 진행되는게 아니라 코루틴으로 좀 느리게 해야할 듯?(씬 이동해야 되서)

@@ -6,7 +6,7 @@ using UnityEngine.InputSystem;
 
 public class InputController : MonoBehaviour
 {
-    /// <summary>
+    /*/// <summary>
     /// 플레이어 인풋 액션
     /// </summary>
     public PlayerInputActions inputAction;
@@ -49,5 +49,5 @@ public class InputController : MonoBehaviour
     IEnumerator DisConnect()
     {
         yield return null;
-    }
+    }*/
 }
