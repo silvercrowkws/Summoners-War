@@ -370,6 +370,7 @@ public class GameManager : Singleton<GameManager>
     /// <param name="damage"></param>
     private void Damage(string monsterName, float damage)
     {
+        // 후보 2
         //Debug.Log("Damage 델리게이트 연결");
         if (monsterName == "WolfBoss")                              // 공격한 몬스터의 이름이 WolfBoss면
         {

@@ -435,7 +435,8 @@ public class MonsterBase : MonoBehaviour
     /// </summary>
     protected virtual void OnParticleStart()
     {
-        if(transform.root.name == "WolfBoss")
+        // 후보 1
+        if (transform.root.name == "WolfBoss")
         {
             if (animator.GetCurrentAnimatorStateInfo(0).IsName("attack1"))          // 지금 실행되고 있는 애니메이션이 attack1이면
             {
