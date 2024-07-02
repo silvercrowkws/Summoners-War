@@ -5,6 +5,7 @@ using UnityEngine.InputSystem;
 
 public class Test_04_Turn : TestBase
 {
+#if UNITY_EDITOR
     protected override void OnTest1(InputAction.CallbackContext context)
     {
         // 1번 누르면 턴 시작되게
@@ -33,4 +34,5 @@ public class Test_04_Turn : TestBase
     {
         Debug.Log("4번 클릭");
     }
+#endif
 }

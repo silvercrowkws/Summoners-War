@@ -5,6 +5,7 @@ using UnityEngine.InputSystem;
 
 public class Test_03_Boss : TestBase
 {
+#if UNITY_EDITOR
     public Boss boss;
 
     protected override void OnTest1(InputAction.CallbackContext context)
@@ -31,4 +32,5 @@ public class Test_03_Boss : TestBase
     {
         boss.Test_Boss_Die();
     }
+#endif
 }

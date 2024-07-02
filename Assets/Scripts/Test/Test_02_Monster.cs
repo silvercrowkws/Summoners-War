@@ -5,6 +5,7 @@ using UnityEngine.InputSystem;
 
 public class Test_02_Monster : TestBase
 {
+#if UNITY_EDITOR
     public WaterMonster waterMonster;
     public FireMonster fireMonster;
     public WindMonster windMonster;
@@ -35,4 +36,5 @@ public class Test_02_Monster : TestBase
     {
         darkMonster.Test_DarkMonster_Attack();
     }
+# endif
 }
