@@ -31,6 +31,16 @@ public class HPGaugeUI : MonoBehaviour
     /// <param name="currentHP">현재 남아있는 체력</param>
     private void OnHPChange(float currentHP)
     {
+        StartCoroutine(Yield());
         slider.value = currentHP / monsterBase.maxHP;
+    }
+
+    /// <summary>
+    /// 한 프레임 기다리는 코루틴(UI 요소들은 프레임 갱신이 끝난 후에 업데이트되기 때문에 있어야 한다?)
+    /// </summary>
+    /// <returns></returns>
+    IEnumerator Yield()
+    {
+        yield return new WaitForEndOfFrame();
     }
 }

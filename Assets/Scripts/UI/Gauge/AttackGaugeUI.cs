@@ -42,6 +42,7 @@ public class AttackGaugeUI : MonoBehaviour
         // 이 게임 오브젝트의 root의 이름이 monsterName(attackGaugeList[i].Monster.name) 이면
         if (transform.root.name == monsterName)
         {
+            StartCoroutine(Yield());
             slider.value = attackGauge / 100.0f;
             //Debug.Log($"__{monsterName}의 조정된 공격게이지 량 : {slider.value}");
 
@@ -56,5 +57,14 @@ public class AttackGaugeUI : MonoBehaviour
                 turnParticle.Clear();       // 남은 파티클 즉시 제거
             }
         }
+    }
+
+    /// <summary>
+    /// 한 프레임 기다리는 코루틴(UI 요소들은 프레임 갱신이 끝난 후에 업데이트되기 때문에 있어야 한다?)
+    /// </summary>
+    /// <returns></returns>
+    IEnumerator Yield()
+    {
+        yield return new WaitForEndOfFrame();
     }
 }

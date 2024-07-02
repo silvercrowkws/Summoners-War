@@ -402,13 +402,14 @@ public class MonsterBase : MonoBehaviour
         }
     }*/
 
+    /// <summary>
+    /// A버튼과 공격을 연결하기 위한 함수
+    /// </summary>
     private void OnAttackClick()
     {
-        Debug.Log("OnAttackClick 실행");
-        // 임시 CallbackContext 생성
-        InputAction.CallbackContext context = new InputAction.CallbackContext();
-        // OnAttackAble 호출
-        OnAttackAble(context);
+        //Debug.Log("OnAttackClick 실행");
+        InputAction.CallbackContext context = new InputAction.CallbackContext();        // 임시 CallbackContext 생성
+        OnAttackAble(context);                                                          // OnAttackAble 호출
     }
 
 

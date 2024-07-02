@@ -261,7 +261,7 @@ RectTransform:
   m_Father: {fileID: 7379321417433018343}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -11760,7 +11760,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7800970568989005516
 Transform:
   m_ObjectHideFlags: 0
@@ -11817,7 +11817,7 @@ MonoBehaviour:
   totalAttackSpeed: 60
   totalAttackPower: 150
   totalDefence: 75
-  maxHP: 200
+  maxHP: 150
   element: 5
   attackEnable: 0
 --- !u!1 &4968475907637010146
@@ -12243,7 +12243,7 @@ RectTransform:
   m_Father: {fileID: 718329309179936239}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0.286, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}

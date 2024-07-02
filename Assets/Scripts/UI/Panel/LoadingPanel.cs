@@ -35,7 +35,7 @@ public class LoadingPanel : MonoBehaviour
         slider.value = 0.0f;                                            // 슬라이더 초기화
 
         // Slider의 값이 변경될 때 호출되는 이벤트 설정
-        slider.onValueChanged.AddListener(OnSliderValueChanged);
+        slider.onValueChanged.AddListener(OnSliderValueChanged);        // 슬라이더의 값이 변경될때마다 OnSliderValueChanged 호출
     }
 
     private void Update()
@@ -46,13 +46,17 @@ public class LoadingPanel : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 슬라이더의 값이 변경될 때 실행될 함수
+    /// </summary>
+    /// <param name="value"></param>
     private void OnSliderValueChanged(float value)
     {
-        if (value >= 1.0f)
+        if (value >= 1.0f)                                      // 슬라이더의 값이 1보다 크거나 같으면
         {
             Debug.Log("전투 준비 완료");
-            GameManager.Instance.loadingComplete = true;
-            this.gameObject.SetActive(false);
+            GameManager.Instance.loadingComplete = true;        // 게임매니저의 loadingComplete 로딩완료 변수를 true로 변경
+            this.gameObject.SetActive(false);                   // 이 게임 오브젝트(로딩 패널) 비활성화
         }
     }
 }

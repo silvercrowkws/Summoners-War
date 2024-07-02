@@ -16,18 +16,15 @@ public class ResultPanel : MonoBehaviour
     /// </summary>
     TextMeshProUGUI defeatText;
 
+    /// <summary>
+    /// 결과 패널
+    /// </summary>
     GameObject panel;
 
     /// <summary>
     /// 게임 매니저
     /// </summary>
     GameManager gameManager;
-
-    /// <summary>
-    /// 보스 이외의 몬스터가 죽었을 때 증가될 변수
-    /// </summary>
-    //public int dieCount = 0;
-
 
     private void Start()
     {
@@ -66,18 +63,17 @@ public class ResultPanel : MonoBehaviour
         else
         {
             // 보스가 죽은게 아니면
-            //dieCount++;                             // dieCount를 누적하고
-            gameManager.monsterAliveCount--;
+            gameManager.monsterAliveCount--;            // monsterAliveCount를 1씩 감소시키고
             Debug.Log($"남은 몹 숫자 : {gameManager.monsterAliveCount}");
         }
 
-        if(gameManager.monsterAliveCount == 0)
+        if(gameManager.monsterAliveCount == 0)          // monsterAliveCount가 0이면 = 살아있는 아군이 없다
         {
             // dieCount가 monsterCount이면
             panel.gameObject.SetActive(true);           // 패널 활성화
             victoryText.gameObject.SetActive(false);    // 승리 비활성화
             defeatText.gameObject.SetActive(true);      // 패배 활성화
-            gameManager.gameState = GameManager.GameState.End;
+            gameManager.gameState = GameManager.GameState.End;      // 게임 상태 End로 변경
         }
     }
 }

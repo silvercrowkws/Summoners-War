@@ -134,6 +134,12 @@ public class GameManager : Singleton<GameManager>
         attackGaugeList.Add(new MonsterInfo(darkMonster.totalAttackSpeed, darkMonster, darkMonster.name));
         attackGaugeList.Add(new MonsterInfo(bossMonster.totalAttackSpeed, bossMonster, bossMonster.name));*/
         attackGaugeList.Add(new MonsterInfo(bossMonster.totalAttackSpeed, bossMonster, bossMonster.name));
+
+        /*BossMonster newBossMonster = Instantiate(bossMonster);
+        newBossMonster.name = "WolfBoss";
+        DontDestroyOnLoad(newBossMonster);*/
+
+        //DontDestroyOnLoad(Instantiate(bossMonster));
         //Instantiate(bossMonster);
 
         /*foreach (var monsterInfo in attackGaugeList)
@@ -251,6 +257,11 @@ public class GameManager : Singleton<GameManager>
                 //DontDestroyOnLoad(waterMonster);
                 Debug.Log($"{waterMonster.name} 리스트에 추가");
                 Debug.Log($"{waterMonster.totalAttackSpeed}");
+
+                /*WaterMonster newWaterMonster = Instantiate(waterMonster);
+                newWaterMonster.name = "01_Water Monster";
+                DontDestroyOnLoad(newWaterMonster);*/
+                
                 waterMonster.gameObject.SetActive(true);
                 break;
             case "02_Fire Monster":
@@ -258,6 +269,11 @@ public class GameManager : Singleton<GameManager>
                 //DontDestroyOnLoad(fireMonster);
                 Debug.Log($"{fireMonster.name} 리스트에 추가");
                 Debug.Log($"{fireMonster.totalAttackSpeed}");
+
+                /*FireMonster newFireMonster = Instantiate(fireMonster);
+                newFireMonster.name = "02_Fire Monster";
+                DontDestroyOnLoad(newFireMonster);*/
+                
                 fireMonster.gameObject.SetActive(true);
                 break;
             case "03_Wind Monster":
@@ -265,6 +281,11 @@ public class GameManager : Singleton<GameManager>
                 //DontDestroyOnLoad(windMonster);
                 Debug.Log($"{windMonster.name} 리스트에 추가");
                 Debug.Log($"{windMonster.totalAttackSpeed}");
+
+                /*WindMonster newWindMonster = Instantiate(windMonster);
+                newWindMonster.name = "03_Wind Monster";
+                DontDestroyOnLoad(newWindMonster);*/
+                
                 windMonster.gameObject.SetActive(true);
                 break;
             case "04_Light Monster":
@@ -272,6 +293,11 @@ public class GameManager : Singleton<GameManager>
                 //DontDestroyOnLoad(lightMonster);
                 Debug.Log($"{lightMonster.name} 리스트에 추가");
                 Debug.Log($"{lightMonster.totalAttackSpeed}");
+
+                /*LightMonster newLightMonster = Instantiate(lightMonster);
+                newLightMonster.name = "04_Light Monster";
+                DontDestroyOnLoad(newLightMonster);*/
+                
                 lightMonster.gameObject.SetActive(true);
                 break;
             case "05_Dark Monster":
@@ -279,6 +305,11 @@ public class GameManager : Singleton<GameManager>
                 //DontDestroyOnLoad(darkMonster);
                 Debug.Log($"{darkMonster.name} 리스트에 추가");
                 Debug.Log($"{darkMonster.totalAttackSpeed}");
+
+                /*DarkMonster newDarkMonster = Instantiate(darkMonster);
+                newDarkMonster.name = "05_Dark Monster";
+                DontDestroyOnLoad(newDarkMonster);*/
+                
                 darkMonster.gameObject.SetActive(true);
                 break;
             /*case "WolfBoss":
