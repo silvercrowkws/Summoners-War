@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using static GameManager;
+//using static GameManager;
 
 
 public enum MonsterState
@@ -324,7 +324,7 @@ public class MonsterBase : MonoBehaviour
     /// </summary>
     protected virtual void Update_Attack()
     {
-        if(gameManager.gameState == GameState.Play)     // 게임 상태가 Play이고
+        if (gameManager.gameState == GameManager.GameState.Play)     // 게임 상태가 Play이고
         {
             //if (monsterState == MonsterState.Attack && onAttackClick && !attackProcessed)
             if (onAttackClick && !attackProcessed)
@@ -373,7 +373,7 @@ public class MonsterBase : MonoBehaviour
         if (this.gameObject.name == gameManager.attackGaugeList[0].Monster.name)
         {
             // 게임이 Play 상태이다
-            if (gameManager.gameState == GameState.Play)
+            if (gameManager.gameState == GameManager.GameState.Play)
             {
                 MonsterState = MonsterState.Attack;     // 추가
                 Debug.Log($"{gameManager.attackGaugeList[0].Monster.name}의 onBossClick = true");
