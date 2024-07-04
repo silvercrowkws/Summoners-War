@@ -46,11 +46,9 @@ public class TurnManager : Singleton<TurnManager>
     /// </summary>
     bool isEndProcess = false;
 
-    MonsterBase monsterBase;
-
     private void Start()
     {
-        monsterBase = FindAnyObjectByType<MonsterBase>();
+        
     }
 
     /// <summary>
